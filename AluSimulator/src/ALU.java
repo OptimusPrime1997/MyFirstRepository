@@ -116,19 +116,14 @@ public class ALU {
 		precision = precision.substring(0, sLength + 2);
 		if (precision.length() > sLength) {
 			if (precision.lastIndexOf("1") == (sLength + 1)) {
-				for (int k = 0; k < sLength + 2; k++) {
-					if (k == (sLength + 1))
-						oper1 += "1";
-					else
-						oper1 += "0";
-				}
-				all2 = integerAddition(oper1, precision, '0', sLength + 2);
-				if (all2.indexOf(sLength + 3) == '1') {
-					precision = all2.indexOf(sLength + 3)
-							+ all2.substring(0, sLength + 1);
+
+				all2 = integerAddition("00" + precision, "0", '1', sLength + 4)
+						.substring(1, sLength + 4);
+				if (all2.charAt(0) == '1') {
+					precision = all2.substring(0, sLength + 1);
 					exponent += 1;
 				} else {
-					precision = all2.substring(0, sLength + 1);
+					precision = all2.substring(1, sLength + 2);
 				}
 			}
 
@@ -673,13 +668,9 @@ public class ALU {
 		String sigS1 = "";
 		String sigS2 = "";
 		String sigT = "";
-
-		String sigS2N = "";
 		String sigS = "";
 		String sigST = "";
-		String sig = "";
-		int sigInt1 = 0;
-		int sigInt2 = 0;
+		String rS = "";
 		int eInt1 = 0;
 		int eInt2 = 0;
 		int eMax = 0;
@@ -689,7 +680,16 @@ public class ALU {
 		eS2 = operand2.substring(1, eLength + 1);
 		eInt1 = Integer.parseInt(integerTrueValue("0" + eS1));
 		eInt2 = Integer.parseInt(integerTrueValue("0" + eS2));
-
+		if (!(operand1.substring(1, 1 + eLength).contains("1"))
+				&& operand1.substring(1 + eLength, 1 + eLength + sLength)
+						.contains("1")) {
+			eInt1++;
+		}
+		if (!(operand2.substring(1, 1 + eLength).contains("1"))
+				&& operand2.substring(1 + eLength, 1 + eLength + sLength)
+						.contains("1")) {
+			eInt2++;
+		}
 		if (eS1.contains("1"))
 			sigS1 = "1"
 					+ operand1.substring(eLength + 1, 1 + eLength + sLength);
@@ -807,8 +807,38 @@ public class ALU {
 								} else if (eMax > 0
 										&& eMax < (standard * 2 - 1)) {
 									sigT = sigST.substring(sigST.indexOf("1"));
-									if (sigT.length() > sLength + 1) {
-										// 暂未写就近舍入
+									if (sigT.length() > 1 + sLength) {
+										if (sigT.charAt(1 + sLength) == '1') {
+											rS = "0"
+													+ integerRepresentation(
+															eMax + "",
+															eLength + 1)
+															.substring(1,
+																	1 + eLength)
+													+ sigT.substring(1,
+															1 + sLength + 1);
+											rS = rounding(rS, sLength, eLength,
+													1);
+											if (rS.substring(1, 1 + eLength)
+													.contains("1"))
+												sigT = "1"
+														+ rS.substring(
+																1 + eLength,
+																1
+																		+ eLength
+																		+ sLength);
+											else
+												sigT = "0"
+														+ rS.substring(
+																1 + eLength,
+																1
+																		+ eLength
+																		+ sLength);
+											eMax = Integer.parseInt("0"
+													+ rS.substring(1,
+															1 + eLength));
+
+										}
 									}
 									for (int i = sigT.length(); i <= 1 + sLength; i++) {
 										sigT += "0";
@@ -822,10 +852,11 @@ public class ALU {
 										else
 											result += "0";
 									}
-									result += (integerRepresentation("0"+eMax,
-											eLength + 1).substring(1, eLength+1));
-									result +=sigT.substring(1, 1+sLength);
-									result+="0";
+									result += (integerRepresentation(
+											"0" + eMax, eLength + 1).substring(
+											1, eLength + 1));
+									result += sigT.substring(1, 1 + sLength);
+									result += "0";
 								} else if (eMax <= 0 && eMax >= 1 - sLength) {
 									sigT = rightLogShift(sigT, 1);
 									// 暂未写就近舍入
@@ -870,28 +901,247 @@ public class ALU {
 	}
 
 	// 18
-	public String floatSubtraction(String operand1, String operand2, int sLength,
-			int eLength, int gLength) {
+	public String floatSubtraction(String operand1, String operand2,
+			int sLength, int eLength, int gLength) {
 		String result = "";
-		String operand2N="";
-		if(operand2.charAt(0)=='0')
-			operand2N="1"+operand2.substring(1);
+		String operand2N = "";
+		if (operand2.charAt(0) == '0')
+			operand2N = "1" + operand2.substring(1);
 		else
-			operand2N="0"+operand2.substring(1);
-		result=floatAddition(operand1, operand2N, sLength, eLength, gLength);
+			operand2N = "0" + operand2.substring(1);
+		result = floatAddition(operand1, operand2N, sLength, eLength, gLength);
 		return result;
 	}
 
 	// 19
-	public String floatMultiplication(String operand1, String operand2, int sLength,
-			int eLength) {
+	public String floatMultiplication(String operand1, String operand2,
+			int sLength, int eLength) {
+		assert sLength >= 8 && eLength >= 8
+				&& operand1.length() == (1 + eLength + sLength)
+				&& operand2.length() == (1 + eLength + sLength);
 		String result = "";
+		String eS1 = "";
+		String eS2 = "";
+		String sigS1 = "";
+		String sigS2 = "";
+		String sigT = "";
+		String sigS = "";
+		String sigST = "";
+		String rS = "";
+		int eInt1 = 0;
+		int eInt2 = 0;
+		int eInt = 0;
+		int standard = (int) (Math.pow(2, eLength - 1));
+
+		eS1 = operand1.substring(1, eLength + 1);
+		eS2 = operand2.substring(1, eLength + 1);
+		eInt1 = Integer.parseInt(integerTrueValue("0" + eS1));
+		eInt2 = Integer.parseInt(integerTrueValue("0" + eS2));
+		if (!(operand1.substring(1, 1 + eLength).contains("1"))
+				&& operand1.substring(1 + eLength, 1 + eLength + sLength)
+						.contains("1")) {
+			eInt1++;
+		}
+		if (!(operand2.substring(1, 1 + eLength).contains("1"))
+				&& operand2.substring(1 + eLength, 1 + eLength + sLength)
+						.contains("1")) {
+			eInt2++;
+		}
+		if ((!(operand1.substring(1).contains("1")))
+				|| (!(operand2.substring(1).contains("1")))) {
+			for (int i = 0; i < 1 + eLength + sLength; i++) {
+				result += "0";
+			}
+		} else {
+			eInt = eInt1 + eInt2 - (standard - 1);
+			if (eS1.contains("1"))
+				sigS1 = "1"
+						+ operand1
+								.substring(1 + eLength, 1 + eLength + sLength);
+			else
+				sigS1 = "0"
+						+ operand1
+								.substring(1 + eLength, 1 + eLength + sLength);
+			if (eS2.contains("1"))
+				sigS2 = "1"
+						+ operand2
+								.substring(1 + eLength, 1 + eLength + sLength);
+			else
+				sigS2 = "0"
+						+ operand2
+								.substring(1 + eLength, 1 + eLength + sLength);
+			sigS = integerMultiplication("0" + sigS1, "0" + sigS2, 2 + sLength);
+
+			eInt = eInt + (3 - sigS.indexOf("1"));
+			sigST = sigS;
+			if (eInt >= (standard * 2 - 1)) {
+				if (operand1.charAt(0) == operand2.charAt(0))
+					result += "0";
+				else
+					result += "1";
+				for (int i = 0; i < eLength + sLength; i++) {
+					if (i < eLength)
+						result += "1";
+					else
+						result += "0";
+				}
+			} else if (eInt < (1 - sLength)) {
+				if (operand1.charAt(0) == operand2.charAt(0))
+					result += "0";
+				else
+					result += "1";
+				for (int i = 0; i < eLength + sLength; i++) {
+					result += "0";
+				}
+			} else if (eInt > 0 && eInt < (standard * 2 - 1)) {
+				sigT = sigST.substring(sigST.indexOf("1"));
+				for (int i = sigT.length(); i < 1 + sLength; i++) {
+					sigT += "0";
+				}
+				if (sigT.length() > 1 + sLength) {
+					if (sigT.charAt(1 + sLength) == '1') {
+						rS = "0"
+								+ integerRepresentation(eInt + "", eLength + 1)
+										.substring(1, 1 + eLength)
+								+ sigT.substring(1, 1 + sLength + 1);
+						rS = rounding(rS, sLength, eLength, 1);
+						if (rS.substring(1, 1 + eLength).contains("1"))
+							sigT = "1"
+									+ rS.substring(1 + eLength, 1 + eLength
+											+ sLength);
+						else
+							sigT = "0"
+									+ rS.substring(1 + eLength, 1 + eLength
+											+ sLength);
+						eInt = Integer.parseInt("0"
+								+ rS.substring(1, 1 + eLength));
+
+					}
+				}
+				sigT = sigT.substring(0, 1 + sLength);
+				if (operand1.charAt(0) == operand2.charAt(0))
+					result += "0";
+				else
+					result += "1";
+				result += integerRepresentation(eInt + "", eLength + 1)
+						.substring(1, 1 + eLength);
+				result += sigT.substring(1, 1 + sLength);
+			} else if (eInt <= 0 && eInt >= (1 - sLength)) {
+				sigT = sigST.substring(sigST.indexOf("1"));
+				for (int i = sigT.length(); i < 1 + sLength; i++) {
+					sigT += "0";
+				}
+				if (sigT.length() > 1 + sLength) {
+					if (sigT.charAt(1 + sLength) == '1') {
+						rS = "0"
+								+ integerRepresentation(eInt + "", eLength + 1)
+										.substring(1, 1 + eLength)
+								+ sigT.substring(1, 1 + sLength + 1);
+						rS = rounding(rS, sLength, eLength, 1);
+						if (rS.substring(1, 1 + eLength).contains("1"))
+							sigT = "1"
+									+ rS.substring(1 + eLength, 1 + eLength
+											+ sLength);
+						else
+							sigT = "0"
+									+ rS.substring(1 + eLength, 1 + eLength
+											+ sLength);
+						eInt = Integer.parseInt("0"
+								+ rS.substring(1, 1 + eLength));
+
+					}
+				}
+				sigT = sigT.substring(0, 1 + sLength);
+				if (operand1.charAt(0) == operand2.charAt(0))
+					result += "0";
+				else
+					result += "1";
+				for (int i = 0; i < eLength; i++) {
+					result += "0";
+				}
+				result += sigT.substring(1, 1 + sLength);
+			}
+
+		}
+
 		return result;
 	}
 
 	// 20
-	public String floatDivision(String operand1, String operand2, int length) {
+	public String floatDivision(String operand1, String operand2, int sLength,
+			int eLength) {
+		assert sLength >= 8 && eLength >= 8
+				&& operand1.length() == (1 + eLength + sLength)
+				&& operand2.length() == (1 + eLength + sLength);
 		String result = "";
+		String eS1 = "";
+		String eS2 = "";
+		String sigS1 = "";
+		String sigS2 = "";
+		String sigT = "";
+
+		String sigS2N = "";
+		String sigS = "";
+		String sigST = "";
+		String rS = "";
+		String sig = "";
+		int sigInt1 = 0;
+		int sigInt2 = 0;
+		int eInt1 = 0;
+		int eInt2 = 0;
+		int eInt = 0;
+		int standard = (int) (Math.pow(2, eLength - 1));
+		eS1 = operand1.substring(1, eLength + 1);
+		eS2 = operand2.substring(1, eLength + 1);
+		eInt1 = Integer.parseInt(integerTrueValue("0" + eS1));
+		eInt2 = Integer.parseInt(integerTrueValue("0" + eS2));
+		if (!(operand1.substring(1, 1 + eLength).contains("1"))
+				&& operand1.substring(1 + eLength, 1 + eLength + sLength)
+						.contains("1")) {
+			eInt1++;
+		}
+		if (!(operand2.substring(1, 1 + eLength).contains("1"))
+				&& operand2.substring(1 + eLength, 1 + eLength + sLength)
+						.contains("1")) {
+			eInt2++;
+		}
+		if ((!(operand1.substring(1).contains("1")))
+				&&(!(operand2.substring(1).contains("1")))) {
+			result="NaN";
+		}else if((!(operand1.substring(1).contains("1")))){
+			result+=operand1.charAt(0);
+			for (int i = 1; i < 1 + eLength + sLength; i++) {
+				result += "0";
+			}
+		}else if((!(operand2.substring(1).contains("1")))){
+			result+=operand1.charAt(0);
+			for (int i = 0; i < sLength+eLength; i++) {
+				if(i<eLength)
+					result+="1";
+				else
+					result += "0";
+			}
+		}else {
+			
+			eInt = eInt1 - eInt2 + (standard - 1);
+			if (eS1.contains("1"))
+				sigS1 = "1"
+						+ operand1
+								.substring(1 + eLength, 1 + eLength + sLength);
+			else
+				sigS1 = "0"
+						+ operand1
+								.substring(1 + eLength, 1 + eLength + sLength);
+			if (eS2.contains("1"))
+				sigS2 = "1"
+						+ operand2
+								.substring(1 + eLength, 1 + eLength + sLength);
+			else
+				sigS2 = "0"
+						+ operand2
+								.substring(1 + eLength, 1 + eLength + sLength);
+			sigS=intergerDivision("0"+sigS1, "0"+sigS2, sLength+2);
+		}
 		return null;
 	}
 
@@ -923,12 +1173,13 @@ public class ALU {
 
 		eInt = Integer.parseInt(integerTrueValue("0" + exponent));
 		if (sigL.charAt(sLength + 1) == '1') {
-			sigT = integerAddition(sigL, "0", '1', sLength + 2);
-			if (sigT.charAt(sigT.length() - 1) == '1') {
-				sig = sigT.charAt(sigT.length()) + sigT.substring(0, sLength);
+			sigT = integerAddition("00" + sigL, "0", '1', sLength + 4)
+					.substring(1, sLength + 4);
+			if (sigT.charAt(0) == '1') {
+				sig = sigT.substring(0, sLength + 1);
 				eInt++;
 			} else {
-				sig = sigT.substring(0, 1 + sLength);
+				sig = sigT.substring(1, 2 + sLength);
 			}
 
 		} else {

@@ -19,6 +19,12 @@ public class ALUTest {
 		public void testRounding() {
 			assertEquals("0101000010001101",
 					alu.rounding("01010000100011001", 9, 6,1));
+			assertEquals("00111111",
+					alu.rounding("001111101", 4, 3,1));
+			assertEquals("00110000",
+					alu.rounding("001011111", 4, 3,1));
+			assertEquals("01110000",
+					alu.rounding("011011111", 4, 3,1));
 		}
 
 	// 2
@@ -211,15 +217,24 @@ public class ALUTest {
 				assertEquals("001111111011100000000000000000000",
 						alu.floatSubtraction("00111111010100000000000000000000",
 	"10111111001000000000000000000000",23, 8,0));
-
-
 			}
 
-	/**
-	 * Test method for
-	 * {@link alu#Calculation(java.lang.String, java.lang.String, alu.Type, alu.Operation, int)}
-	 * .
-	 */
+//19
+		@Test
+		public void testFloatMultiplication(){
+			assertEquals("10111110011000000000000000000000",
+					alu.floatMultiplication("00111111000000000000000000000000",
+"10111110111000000000000000000000",23, 8));
+			assertEquals("11000010010000111100000000000000",
+					alu.floatMultiplication("00111111010000000000000000000000",
+"11000010100000101000000000000000",23, 8));
+//			assertEquals("001111011000000000000000000000000",
+//					alu.floatMultiplication("00111111000000000000000000000000",
+//"00111110111000000000000000000000",23, 8));
+//			assertEquals("001111111011100000000000000000000",
+//					alu.floatMultiplication("00111111010100000000000000000000",
+//"10111111001000000000000000000000",23, 8));
+		}
 	@Test
 	public void testCalculation() {
 

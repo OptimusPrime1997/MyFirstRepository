@@ -684,81 +684,103 @@ public class ALU {
 		int eInt2 = 0;
 		int eMax = 0;
 		int standard = (int) (Math.pow(2, eLength - 1));
+		boolean isOverflow = true;
 		eS1 = operand1.substring(1, eLength + 1);
 		eS2 = operand2.substring(1, eLength + 1);
 		eInt1 = Integer.parseInt(integerTrueValue("0" + eS1));
 		eInt2 = Integer.parseInt(integerTrueValue("0" + eS2));
+
 		if (eS1.contains("1"))
 			sigS1 = "1"
 					+ operand1.substring(eLength + 1, 1 + eLength + sLength);
 		else
 			sigS1 = "0"
 					+ operand1.substring(eLength + 1, 1 + eLength + sLength);
+
 		if (eS2.contains("1"))
 			sigS2 = "1"
-					+ operand1.substring(eLength + 1, 1 + eLength + sLength);
+					+ operand2.substring(eLength + 1, 1 + eLength + sLength);
 		else
 			sigS2 = "0"
-					+ operand1.substring(eLength + 1, 1 + eLength + sLength);
+					+ operand2.substring(eLength + 1, 1 + eLength + sLength);
 
 		for (int i = 0; i < gLength; i++) {
 			sigS1 += "0";
 			sigS2 += "0";
 		}
+
 		if (!(operand1.substring(1).contains("1"))) {
-			result = operand2+"0";
+			result = operand2 + "0";
 		} else {
 			if (!(operand2.substring(1).contains("1"))) {
-				result = operand1+"0";
+				result = operand1 + "0";
 			} else {
 				eMax = Math.max(eInt1, eInt2);
 				while (eInt1 < eMax
-						&& (sigS1.substring(0, sLength + 2)).contains("1")) {
+						&& (sigS1.substring(0, sLength + 1)).contains("1")) {
 					sigS1 = rightLogShift(sigS1, 1);
 					eInt1++;
 				}
 				while (eInt2 < eMax
-						&& (sigS2.substring(0, sLength + 2)).contains("1")) {
+						&& (sigS2.substring(0, sLength + 1)).contains("1")) {
 					sigS2 = rightLogShift(sigS2, 1);
 					eInt2++;
 				}
+
 				if (!((sigS1.substring(0, sLength + 1)).contains("1"))) {
-					result = operand2+"0";
+					result = operand2 + "0";
 				} else {
-					if (!((sigS2.substring(0, sLength + 2)).contains("1"))) {
-						result = operand1+"0";
+					if (!((sigS2.substring(0, sLength + 1)).contains("1"))) {
+						result = operand1 + "0";
 					} else {
 						if (sigS1.contains("1") && sigS2.contains("1")
 								&& eInt1 == eInt2) {
 							if (operand1.charAt(0) != operand2.charAt(0)) {
-								sigS2 = integerAddition(sigS1, negation(sigS2),
+								sigS2 = integerAddition("0", negation(sigS2),
 										'1', sigS1.length()).substring(0,
 										sigS1.length());
 							}
+
 							sigS = integerAddition(sigS1, sigS2, '0',
 									sigS1.length());
-							if (sigS.charAt(sigS1.length()) == '1') {
-								sigST = sigS.charAt(sigS1.length())
-										+ sigS.substring(0, sLength + gLength);
-								eMax++;
-								if (eMax >= (standard * 2 - 1)) {
-									if (operand1.charAt(0) == '0')
-										result += "0";
-									else
+
+							if (operand1.charAt(0) == operand2.charAt(0)) {
+								if (sigS.charAt(sigS1.length()) == '1') {
+									sigST = sigS.charAt(sigS1.length())
+											+ sigS.substring(0, sLength
+													+ gLength);
+									eMax++;
+									if (eMax >= (standard * 2 - 1)) {
+										if (operand1.charAt(0) == '0')
+											result += "0";
+										else
+											result += "1";
+										result += (integerRepresentation(
+												(standard * 2 - 1) + "",
+												eLength + 1).substring(1,
+												eLength + 1));
+										for (int i = 0; i < sLength; i++) {
+											result += "0";
+										}
 										result += "1";
-									result += (integerRepresentation(
-											(standard * 2 - 1) + "",
-											eLength + 1).substring(1,
-											eLength + 1));
-									for (int i = 0; i < sLength; i++) {
-										result += "0";
 									}
-									result+="1";
+								} else {
+									sigST = sigS.substring(0, 1 + sLength
+											+ gLength);
 								}
 							} else {
-								sigST = sigS
-										.substring(0, 1 + sLength + gLength);
+								if (sigS.charAt(sigS1.length()) == '1') {
+									sigST = sigS.substring(0, 1 + sLength
+											+ gLength);
+								} else {
+									isOverflow = false;
+									sigST = integerAddition("0",
+											negation(sigST), '1',
+											sigST.length()).substring(0,
+											1 + sLength + gLength);
+								}
 							}
+
 							if (!(sigST.contains("1"))) {
 								for (int i = 0; i < 1 + eLength + sLength; i++) {
 									result += "0";
@@ -766,10 +788,14 @@ public class ALU {
 							} else {
 								eMax = eMax - sigST.indexOf("1");
 								if (eMax >= (standard * 2 - 1)) {
-									if (operand1.charAt(0) == '0')
-										result += "0";
-									else
-										result += "1";
+									if (isOverflow) {
+										result += operand1.charAt(0);
+									} else {
+										if (operand1.charAt(0) == '0')
+											result += "1";
+										else
+											result += "0";
+									}
 									result += (integerRepresentation(
 											(standard * 2 - 1) + "",
 											eLength + 1).substring(1,
@@ -777,47 +803,59 @@ public class ALU {
 									for (int i = 0; i < sLength; i++) {
 										result += "0";
 									}
-									result+="1";
+									result += "1";
 								} else if (eMax > 0
 										&& eMax < (standard * 2 - 1)) {
 									sigT = sigST.substring(sigST.indexOf("1"));
 									if (sigT.length() > sLength + 1) {
-//										暂未写就近舍入
+										// 暂未写就近舍入
 									}
 									for (int i = sigT.length(); i <= 1 + sLength; i++) {
 										sigT += "0";
 									}
-									sigT=sigT.substring(0, 1+sLength);
-									
-									if (operand1.charAt(0) == '0')
-										result += "0";
-									else
-										result += "1";
-									result += (integerRepresentation(eMax+"", eLength+1)
-											.substring(0, eLength));
+									sigT = sigT.substring(0, 1 + sLength);
+									if (isOverflow) {
+										result += operand1.charAt(0);
+									} else {
+										if (operand1.charAt(0) == '0')
+											result += "1";
+										else
+											result += "0";
+									}
+									result += (integerRepresentation("0"+eMax,
+											eLength + 1).substring(1, eLength+1));
+									result +=sigT.substring(1, 1+sLength);
 									result+="0";
 								} else if (eMax <= 0 && eMax >= 1 - sLength) {
-										sigT=rightLogShift(sigT, 1);
-//										暂未写就近舍入
-									
+									sigT = rightLogShift(sigT, 1);
+									// 暂未写就近舍入
+
+									if (isOverflow) {
+										result += operand1.charAt(0);
+									} else {
 										if (operand1.charAt(0) == '0')
-											result += "0";
-										else
 											result += "1";
-										for (int i = 0; i < eLength; i++) {
+										else
 											result += "0";
-										}
-										result+=sigT.substring(1, 1+sLength);
-										result+="0";
-								} else if (eMax < 1 - sLength) {
-									if (operand1.charAt(0) == '0')
+									}
+									for (int i = 0; i < eLength; i++) {
 										result += "0";
-									else
-										result += "1";
+									}
+									result += sigT.substring(1, 1 + sLength);
+									result += "0";
+								} else if (eMax < 1 - sLength) {
+									if (isOverflow) {
+										result += operand1.charAt(0);
+									} else {
+										if (operand1.charAt(0) == '0')
+											result += "1";
+										else
+											result += "0";
+									}
 									for (int i = 0; i < eLength + sLength; i++) {
 										result += "0";
 									}
-									result+="1";
+									result += "1";
 								}
 
 							}
@@ -832,16 +870,23 @@ public class ALU {
 	}
 
 	// 18
-	public String floatSubtraction(String operand1, String operand2, int length) {
+	public String floatSubtraction(String operand1, String operand2, int sLength,
+			int eLength, int gLength) {
 		String result = "";
-		return null;
+		String operand2N="";
+		if(operand2.charAt(0)=='0')
+			operand2N="1"+operand2.substring(1);
+		else
+			operand2N="0"+operand2.substring(1);
+		result=floatAddition(operand1, operand2N, sLength, eLength, gLength);
+		return result;
 	}
 
 	// 19
-	public String floatMultiplication(String operand1, String operand2,
-			int length) {
+	public String floatMultiplication(String operand1, String operand2, int sLength,
+			int eLength) {
 		String result = "";
-		return null;
+		return result;
 	}
 
 	// 20

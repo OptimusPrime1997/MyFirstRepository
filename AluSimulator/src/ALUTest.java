@@ -187,26 +187,33 @@ public class ALUTest {
 			assertEquals("001111111000000000000000000000000",
 					alu.floatAddition("00000000000000000000000000000000",
 "00111111100000000000000000000000",23, 8,4));
-//			assertEquals("00111111000000000000000000000000",
-//					alu.floatRepresentation("0.5", 23, 8));
-//			assertEquals("10111111000000000000000000000000",
-//					alu.floatRepresentation("-0.5", 23, 8));
-//			assertEquals("10111110111000000000000000000000",
-//					alu.floatRepresentation("-0.4375", 23, 8));
-//			assertEquals("1100001110111101",
-//					alu.floatRepresentation("-7.4765625", 9, 6));
-//			assertEquals("0101000010001100", alu.floatRepresentation("652", 9, 6));
-//			assertEquals("00000100000000",
-//					alu.floatRepresentation("0.0078125", 9, 4));
-//			assertEquals("10000100000000",
-//					alu.floatRepresentation("-0.0078125", 9, 4));
-//			assertEquals("1100001110111101",
-//					alu.floatRepresentation("-7.4765625", 9, 6));
-//			assertEquals("1100001110111101", alu.floatRepresentation("-7.48", 9, 6));
-//			assertEquals("0101000010001101",
-//					alu.floatRepresentation("652.51", 9, 6));
+			assertEquals("001111011000000000000000000000000",
+					alu.floatAddition("00111111000000000000000000000000",
+"10111110111000000000000000000000",23, 8,0));
+			assertEquals("001111111011100000000000000000000",
+					alu.floatAddition("00111111010100000000000000000000",
+"00111111001000000000000000000000",23, 8,0));
+
 
 		}
+	// 18
+		@Test
+			public void testFloatSubtraction(){
+				assertEquals("001111111000000000000000000000000",
+						alu.floatSubtraction("00111111100000000000000000000000",
+	"10000000000000000000000000000000",23, 8,4));
+				assertEquals("001111111000000000000000000000000",
+						alu.floatSubtraction("00000000000000000000000000000000",
+	"10111111100000000000000000000000",23, 8,4));
+				assertEquals("001111011000000000000000000000000",
+						alu.floatSubtraction("00111111000000000000000000000000",
+	"00111110111000000000000000000000",23, 8,0));
+				assertEquals("001111111011100000000000000000000",
+						alu.floatSubtraction("00111111010100000000000000000000",
+	"10111111001000000000000000000000",23, 8,0));
+
+
+			}
 
 	/**
 	 * Test method for

@@ -43,12 +43,12 @@ public class ALU {
 						formula.indexOf(")"));
 				interval = formula.split(operand[1]
 						+ "|\\(|\\)|\\+|-|\\*|\\/|=");
-				for(int i=0;i<interval.length;i++){
-					if(interval[i]!=null){
+				for (int i = 0; i < interval.length; i++) {
+					if (interval[i] != null) {
 						operand[0] = interval[i];
 					}
 				}
-				
+
 			}
 
 		}
@@ -96,6 +96,7 @@ public class ALU {
 		}
 		return result;
 	}
+
 	// 2
 	public String integerRepresentation(String number, int length) {
 		String result = "";
@@ -817,25 +818,25 @@ public class ALU {
 								&& eInt1 == eInt2) {
 							if (operand1.charAt(0) != operand2.charAt(0)) {
 								sigS2 = integerAddition("0", negation(sigS2),
-										'1', 1+sLength+gLength).substring(0,
-										1+sLength+gLength);
+										'1', 1 + sLength + gLength).substring(
+										0, 1 + sLength + gLength);
 							}
 
-							sigS = integerAddition("00"+sigS1,"00"+ sigS2, '0',
-									3+sLength+gLength)
-									.substring(0, 3+sLength+gLength);
+							sigS = integerAddition("00" + sigS1, "00" + sigS2,
+									'0', 3 + sLength + gLength).substring(0,
+									3 + sLength + gLength);
 							if (operand1.charAt(0) == operand2.charAt(0)) {
 								if (sigS.charAt(1) == '1') {
-									sigST = sigS.substring(1, 2+sLength
-													+ gLength);
+									sigST = sigS.substring(1, 2 + sLength
+											+ gLength);
 									eMax++;
 									if (eMax >= (standard * 2 - 1)) {
 										if (operand1.charAt(0) == '0')
 											result += "0";
 										else
 											result += "1";
-										result += (integerRepresentation(
-												""+(standard * 2 - 1) ,
+										result += (integerRepresentation(""
+												+ (standard * 2 - 1),
 												eLength + 1).substring(1,
 												eLength + 1));
 										for (int i = 0; i < sLength; i++) {
@@ -857,7 +858,7 @@ public class ALU {
 											+ gLength);
 									sigST = integerAddition("0",
 											negation(sigST), '1',
-											1+sLength+gLength).substring(0,
+											1 + sLength + gLength).substring(0,
 											1 + sLength + gLength);
 								}
 							}
@@ -933,9 +934,9 @@ public class ALU {
 										else
 											result += "0";
 									}
-									result += (integerRepresentation(
-											""+eMax, eLength + 1).substring(
-											1, eLength + 1));
+									result += (integerRepresentation("" + eMax,
+											eLength + 1).substring(1,
+											eLength + 1));
 									result += sigT.substring(1, 1 + sLength);
 									result += "0";
 								} else if (eMax <= 0 && eMax >= 1 - sLength) {

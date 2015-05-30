@@ -6,8 +6,6 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-
-
 public class ALUTest {
 
 	ALU alu = new ALU();
@@ -24,20 +22,19 @@ public class ALUTest {
 
 	@Test
 	public void testCalculation() {
-		 assertEquals("-2", alu.calculation("5+(-7)="));
-		 assertEquals("12", alu.calculation("5-(-7)="));
-		 assertEquals("16", alu.calculation("4*4="));
-		 assertEquals("2", alu.calculation("9/4="));
-		 assertEquals("1.4375", alu.calculation("0.8125+0.625="));
-		 assertEquals("-0.1875", alu.calculation("0.625-0.8125="));
+		assertEquals("-2", alu.calculation("5+(-7)="));
+		assertEquals("12", alu.calculation("5-(-7)="));
+		assertEquals("16", alu.calculation("4*4="));
+		assertEquals("2", alu.calculation("9/4="));
+		assertEquals("1.4375", alu.calculation("0.8125+0.625="));
+		assertEquals("-0.1875", alu.calculation("0.625-0.8125="));
 		assertEquals("0.1875", alu.calculation("0.8125-0.625="));
 		assertEquals("0.0625", alu.calculation("0.5+(-0.4375)="));
 		assertEquals("0.21875", alu.calculation("0.5*0.4375="));
 		assertEquals("66", alu.calculation("0.75-(-65.25)="));
 		assertEquals("-48.9375", alu.calculation("0.75*(-65.25)="));
 		assertEquals("-0.01149425283074379", alu.calculation("0.75/(-65.25)="));
-		
-	
+
 	}
 
 	// 2
@@ -117,6 +114,13 @@ public class ALUTest {
 
 	}
 
+	// 7
+	@Test
+	public void testNegation() {
+		assertEquals("11110", alu.negation("00001"));
+		assertEquals("0111", alu.negation("1000"));
+	}
+
 	// 8
 	@Test
 	public void testLeftShift() {
@@ -131,28 +135,21 @@ public class ALUTest {
 		assertEquals("00011", alu.rightAriShift("01101", 2));
 	}
 
-	// 9
+	// 10
 	@Test
 	public void testRightLogShift() {
 		assertEquals("0000010101010", alu.rightLogShift("1010101011111", 5));
 		assertEquals("00011", alu.rightLogShift("01101", 2));
 	}
 
-	// 7
-	@Test
-	public void testNegation() {
-		assertEquals("11110", alu.negation("00001"));
-		assertEquals("0111", alu.negation("1000"));
-	}
-
-	
-	// 12
+	// 11
 
 	@Test
 	public void testFullAdder() {
 		assertEquals("11", alu.fullAdder('1', '1', '1'));
 	}
 
+	// 12
 	@Test
 	public void testIntegerAddition() {
 		assertEquals("1111111100",
@@ -160,7 +157,6 @@ public class ALUTest {
 		assertEquals("10011", alu.integerAddition("0111", "0010", '0', 4));
 	}
 
-	
 	// 13
 	@Test
 	public void testCLAAdder() {
@@ -172,7 +168,7 @@ public class ALUTest {
 
 	// 14
 	@Test
-	public void testIntegerSubstraction() {
+	public void testIntegerSubtraction() {
 		assertEquals("00100", alu.integerSubtraction("0101", "0011", 4));
 		assertEquals("10101", alu.integerSubtraction("0111", "1101", 4));
 	}
@@ -243,12 +239,6 @@ public class ALUTest {
 		assertEquals("11000010010000111100000000000000",
 				alu.floatMultiplication("00111111010000000000000000000000",
 						"11000010100000101000000000000000", 23, 8));
-		// assertEquals("001111011000000000000000000000000",
-		// alu.floatMultiplication("00111111000000000000000000000000",
-		// "00111110111000000000000000000000",23, 8));
-		// assertEquals("001111111011100000000000000000000",
-		// alu.floatMultiplication("00111111010100000000000000000000",
-		// "10111111001000000000000000000000",23, 8));
 	}
 
 	// 20

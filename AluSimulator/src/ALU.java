@@ -21,76 +21,81 @@ public class ALU {
 		String result = "";
 		String[] operand = new String[2];
 		String[] interval = new String[2];
-		String oper1="";
-		String oper2="";
-		String temp="";
-		String formula1 = "";
-		String bin1 = "";
-		String bin2 = "";
-		String eS1 = "";
-		String eS2 = "";
-		String sigS1 = "";
-		String sigS2 = "";
-		String sigT = "";
-		String sigS2N = "";
-		String sigS = "";
-		String sigST = "";
-		String rS = "";
-		String sig = "";
-		String all = "";
+		String oper1 = "";
+		String oper2 = "";
+		String operf1 = "";
+		String operf2 = "";
+		String temp = "";
+		String tempf = "";
 
-		String temp1 = "";
-		int sigInt1 = 0;
-		int sigInt2 = 0;
-		int eInt1 = 0;
-		int eInt2 = 0;
-		int eInt = 0;
-		int standard = 0;
 		if (!formula.contains("-")
-				|| (formula.contains("-") && equals(!formula.contains("\\(")))) {
+				|| (formula.contains("-") && (!formula.contains("(")))) {
 			operand = formula.split("\\+|\\*|-|\\/|=");
-		} else if (formula.contains("\\(") && formula.contains("\\(")) {
+		} else if (formula.contains("(") && formula.contains("(")) {
 			if (formula.indexOf(0) == '(') {
-				operand[0] = formula.substring(formula.indexOf("\\(") + 1,
-						formula.indexOf("\\)"));
+				operand[0] = formula.substring(formula.indexOf("(") + 1,
+						formula.indexOf(")"));
 				interval = formula.split(operand[0]
 						+ "|\\(|\\)|\\+|-|\\*|\\/|=");
 				operand[1] = interval[0];
 			} else {
-				operand[1] = formula.substring(formula.indexOf("\\(") + 1,
-						formula.indexOf("\\)"));
+				operand[1] = formula.substring(formula.indexOf("(") + 1,
+						formula.indexOf(")"));
 				interval = formula.split(operand[1]
 						+ "|\\(|\\)|\\+|-|\\*|\\/|=");
-				operand[0] = interval[0];
+				for(int i=0;i<interval.length;i++){
+					if(interval[i]!=null){
+						operand[0] = interval[i];
+					}
+				}
+				
 			}
 
 		}
 		if ((!operand[0].contains(".")) && (!operand[1].contains("."))) {
-			oper1=integerRepresentation(operand[0], 32);
-			oper2=integerRepresentation(operand[1], 32);
+			oper1 = integerRepresentation(operand[0], 32);
+			oper2 = integerRepresentation(operand[1], 32);
 			if (formula.contains("+")) {
-				temp=integerAddition(oper1, oper2, '0', 32);
+				temp = integerAddition(oper1, oper2, '0', 32);
+				if (temp.indexOf(32) == '1') {
+					result = integerTrueValue(oper1.charAt(0)
+							+ temp.substring(0, 32));
+				} else
+					result = integerTrueValue(temp.substring(0, 32));
 			} else if (formula.contains("*")) {
-
+				temp = integerMultiplication(oper1, oper2, 32);
+				result = integerTrueValue(temp);
 			} else if (formula.contains("/")) {
-
+				temp = intergerDivision(oper1, oper2, 32);
+				result = integerTrueValue(temp.substring(0, 32));
 			} else {
-
+				temp = integerSubtraction(oper1, oper2, 32);
+				if (temp.indexOf(32) == '1') {
+					result = integerTrueValue(oper1.charAt(0)
+							+ temp.substring(0, 32));
+				} else
+					result = integerTrueValue(temp.substring(0, 32));
 			}
 		} else {
+			operf1 = ieee754(operand[0], 32);
+			operf2 = ieee754(operand[1], 32);
+
 			if (formula.contains("+")) {
-
+				tempf = floatAddition(operf1, operf2, 23, 8, 0);
+				result = floatTrueValue(tempf.substring(0, 32), 23, 8);
 			} else if (formula.contains("*")) {
-
+				tempf = floatMultiplication(operf1, operf2, 23, 8);
+				result = floatTrueValue(tempf.substring(0, 32), 23, 8);
 			} else if (formula.contains("/")) {
-
+				tempf = floatDivision(operf1, operf2, 23, 8);
+				result = floatTrueValue(tempf, 23, 8);
 			} else {
-
+				tempf = floatSubtraction(operf1, operf2, 23, 8, 0);
+				result = floatTrueValue(tempf.substring(0, 32), 23, 8);
 			}
 		}
 		return result;
 	}
-
 	// 2
 	public String integerRepresentation(String number, int length) {
 		String result = "";
@@ -149,7 +154,6 @@ public class ALU {
 		String s = "";
 		String test = "";
 		String precision = "";
-		String oper1 = "";
 		String all2 = "";
 		int standard = (int) Math.pow(2, eLength - 1);
 		num = Float.parseFloat(number);
@@ -574,9 +578,7 @@ public class ALU {
 				&& (operand1 != null) && (operand2 != null);
 		String result = "";
 		String s = "";
-		String temp = "";
 		String oper2 = "";
-		int len = 0;
 		String operand2Negation = "";
 		oper2 = negation(operand2);
 		for (int i = 0; i < oper2.length(); i++) {
@@ -815,17 +817,16 @@ public class ALU {
 								&& eInt1 == eInt2) {
 							if (operand1.charAt(0) != operand2.charAt(0)) {
 								sigS2 = integerAddition("0", negation(sigS2),
-										'1', sigS1.length()).substring(0,
-										sigS1.length());
+										'1', 1+sLength+gLength).substring(0,
+										1+sLength+gLength);
 							}
 
-							sigS = integerAddition(sigS1, sigS2, '0',
-									sigS1.length());
-
+							sigS = integerAddition("00"+sigS1,"00"+ sigS2, '0',
+									3+sLength+gLength)
+									.substring(0, 3+sLength+gLength);
 							if (operand1.charAt(0) == operand2.charAt(0)) {
-								if (sigS.charAt(sigS1.length()) == '1') {
-									sigST = sigS.charAt(sigS1.length())
-											+ sigS.substring(0, sLength
+								if (sigS.charAt(1) == '1') {
+									sigST = sigS.substring(1, 2+sLength
 													+ gLength);
 									eMax++;
 									if (eMax >= (standard * 2 - 1)) {
@@ -834,7 +835,7 @@ public class ALU {
 										else
 											result += "1";
 										result += (integerRepresentation(
-												(standard * 2 - 1) + "",
+												""+(standard * 2 - 1) ,
 												eLength + 1).substring(1,
 												eLength + 1));
 										for (int i = 0; i < sLength; i++) {
@@ -843,18 +844,20 @@ public class ALU {
 										result += "1";
 									}
 								} else {
-									sigST = sigS.substring(0, 1 + sLength
+									sigST = sigS.substring(2, 3 + sLength
 											+ gLength);
 								}
 							} else {
-								if (sigS.charAt(sigS1.length()) == '1') {
-									sigST = sigS.substring(0, 1 + sLength
+								if (sigS.charAt(1) == '1') {
+									sigST = sigS.substring(2, 3 + sLength
 											+ gLength);
 								} else {
 									isOverflow = false;
+									sigST = sigS.substring(2, 3 + sLength
+											+ gLength);
 									sigST = integerAddition("0",
 											negation(sigST), '1',
-											sigST.length()).substring(0,
+											1+sLength+gLength).substring(0,
 											1 + sLength + gLength);
 								}
 							}
@@ -931,7 +934,7 @@ public class ALU {
 											result += "0";
 									}
 									result += (integerRepresentation(
-											"0" + eMax, eLength + 1).substring(
+											""+eMax, eLength + 1).substring(
 											1, eLength + 1));
 									result += sigT.substring(1, 1 + sLength);
 									result += "0";

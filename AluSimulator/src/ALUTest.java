@@ -6,32 +6,40 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
-/**
- * @author 1
- *
- */
+
 
 public class ALUTest {
 
 	ALU alu = new ALU();
-	// extra
-		@Test
-		public void testRounding() {
-			assertEquals("0101000010001101",
-					alu.rounding("01010000100011001", 9, 6,1));
-			assertEquals("00111111",
-					alu.rounding("001111101", 4, 3,1));
-			assertEquals("00110000",
-					alu.rounding("001011111", 4, 3,1));
-			assertEquals("01110000",
-					alu.rounding("011011111", 4, 3,1));
-		}
-		@Test	
-		public void testCalculation() {
-			assertEquals("-2", alu.calculation("5-(-7)="));
-			
 
-		}
+	// extra
+	@Test
+	public void testRounding() {
+		assertEquals("0101000010001101",
+				alu.rounding("01010000100011001", 9, 6, 1));
+		assertEquals("00111111", alu.rounding("001111101", 4, 3, 1));
+		assertEquals("00110000", alu.rounding("001011111", 4, 3, 1));
+		assertEquals("01110000", alu.rounding("011011111", 4, 3, 1));
+	}
+
+	@Test
+	public void testCalculation() {
+		 assertEquals("-2", alu.calculation("5+(-7)="));
+		 assertEquals("12", alu.calculation("5-(-7)="));
+		 assertEquals("16", alu.calculation("4*4="));
+		 assertEquals("2", alu.calculation("9/4="));
+		 assertEquals("1.4375", alu.calculation("0.8125+0.625="));
+		 assertEquals("-0.1875", alu.calculation("0.625-0.8125="));
+		assertEquals("0.1875", alu.calculation("0.8125-0.625="));
+		assertEquals("0.0625", alu.calculation("0.5+(-0.4375)="));
+		assertEquals("0.21875", alu.calculation("0.5*0.4375="));
+		assertEquals("66", alu.calculation("0.75-(-65.25)="));
+		assertEquals("-48.9375", alu.calculation("0.75*(-65.25)="));
+		assertEquals("-0.01149425283074379", alu.calculation("0.75/(-65.25)="));
+		
+	
+	}
+
 	// 2
 	@Test
 	public void testIntegerRepresentation() {
@@ -137,9 +145,7 @@ public class ALUTest {
 		assertEquals("0111", alu.negation("1000"));
 	}
 
-	/**
-	 * Test method for {@link alu#FullAdder(char, char, char)}.
-	 */
+	
 	// 12
 
 	@Test
@@ -154,10 +160,7 @@ public class ALUTest {
 		assertEquals("10011", alu.integerAddition("0111", "0010", '0', 4));
 	}
 
-	/**
-	 * Test method for
-	 * {@link alu#CLAAdder(java.lang.String, java.lang.String, char, int)}.
-	 */
+	
 	// 13
 	@Test
 	public void testCLAAdder() {
@@ -188,69 +191,74 @@ public class ALUTest {
 		assertEquals("11101111", alu.intergerDivision("1001", "0011", 4));
 		assertEquals("00100001", alu.intergerDivision("0111", "0011", 4));
 		assertEquals("11100001", alu.intergerDivision("0111", "1101", 4));
-		
+
 	}
+
 	// 17
 	@Test
-		public void testFloatAddition(){
-			assertEquals("001111111000000000000000000000000",
-					alu.floatAddition("00111111100000000000000000000000",
-"00000000000000000000000000000000",23, 8,4));
-			assertEquals("001111111000000000000000000000000",
-					alu.floatAddition("00000000000000000000000000000000",
-"00111111100000000000000000000000",23, 8,4));
-			assertEquals("001111011000000000000000000000000",
-					alu.floatAddition("00111111000000000000000000000000",
-"10111110111000000000000000000000",23, 8,0));
-			assertEquals("001111111011100000000000000000000",
-					alu.floatAddition("00111111010100000000000000000000",
-"00111111001000000000000000000000",23, 8,0));
+	public void testFloatAddition() {
+		assertEquals("001111111000000000000000000000000", alu.floatAddition(
+				"00111111100000000000000000000000",
+				"00000000000000000000000000000000", 23, 8, 4));
+		assertEquals("001111111000000000000000000000000", alu.floatAddition(
+				"00000000000000000000000000000000",
+				"00111111100000000000000000000000", 23, 8, 4));
+		assertEquals("001111011000000000000000000000000", alu.floatAddition(
+				"00111111000000000000000000000000",
+				"10111110111000000000000000000000", 23, 8, 0));
+		assertEquals("001111111011100000000000000000000", alu.floatAddition(
+				"00111111010100000000000000000000",
+				"00111111001000000000000000000000", 23, 8, 0));
+		assertEquals("001111100100000000000000000000000", alu.floatAddition(
+				"00111111010100000000000000000000",
+				"10111111001000000000000000000000", 23, 8, 0));
+	}
 
-
-		}
 	// 18
-		@Test
-			public void testFloatSubtraction(){
-				assertEquals("001111111000000000000000000000000",
-						alu.floatSubtraction("00111111100000000000000000000000",
-	"10000000000000000000000000000000",23, 8,4));
-				assertEquals("001111111000000000000000000000000",
-						alu.floatSubtraction("00000000000000000000000000000000",
-	"10111111100000000000000000000000",23, 8,4));
-				assertEquals("001111011000000000000000000000000",
-						alu.floatSubtraction("00111111000000000000000000000000",
-	"00111110111000000000000000000000",23, 8,0));
-				assertEquals("001111111011100000000000000000000",
-						alu.floatSubtraction("00111111010100000000000000000000",
-	"10111111001000000000000000000000",23, 8,0));
-			}
+	@Test
+	public void testFloatSubtraction() {
+		assertEquals("001111111000000000000000000000000", alu.floatSubtraction(
+				"00111111100000000000000000000000",
+				"10000000000000000000000000000000", 23, 8, 4));
+		assertEquals("001111111000000000000000000000000", alu.floatSubtraction(
+				"00000000000000000000000000000000",
+				"10111111100000000000000000000000", 23, 8, 4));
+		assertEquals("001111011000000000000000000000000", alu.floatSubtraction(
+				"00111111000000000000000000000000",
+				"00111110111000000000000000000000", 23, 8, 0));
+		assertEquals("001111111011100000000000000000000", alu.floatSubtraction(
+				"00111111010100000000000000000000",
+				"10111111001000000000000000000000", 23, 8, 0));
+		assertEquals("001111100100000000000000000000000", alu.floatSubtraction(
+				"00111111010100000000000000000000",
+				"00111111001000000000000000000000", 23, 8, 0));
+	}
 
-//19
-		@Test
-		public void testFloatMultiplication(){
-			assertEquals("10111110011000000000000000000000",
-					alu.floatMultiplication("00111111000000000000000000000000",
-"10111110111000000000000000000000",23, 8));
-			assertEquals("11000010010000111100000000000000",
-					alu.floatMultiplication("00111111010000000000000000000000",
-"11000010100000101000000000000000",23, 8));
-//			assertEquals("001111011000000000000000000000000",
-//					alu.floatMultiplication("00111111000000000000000000000000",
-//"00111110111000000000000000000000",23, 8));
-//			assertEquals("001111111011100000000000000000000",
-//					alu.floatMultiplication("00111111010100000000000000000000",
-//"10111111001000000000000000000000",23, 8));
-		}
-		//20
-				@Test
-				public void testFloatDivision(){
-					assertEquals("00111111011000000000000000000000",
-							alu.floatDivision("00111110111000000000000000000000",
-		"00111111000000000000000000000000",23, 8));
-					assertEquals("10111100001111000101001001100100",
-							alu.floatDivision("00111111010000000000000000000000",
-		"11000010100000101000000000000000",23, 8));
-				}
+	// 19
+	@Test
+	public void testFloatMultiplication() {
+		assertEquals("10111110011000000000000000000000",
+				alu.floatMultiplication("00111111000000000000000000000000",
+						"10111110111000000000000000000000", 23, 8));
+		assertEquals("11000010010000111100000000000000",
+				alu.floatMultiplication("00111111010000000000000000000000",
+						"11000010100000101000000000000000", 23, 8));
+		// assertEquals("001111011000000000000000000000000",
+		// alu.floatMultiplication("00111111000000000000000000000000",
+		// "00111110111000000000000000000000",23, 8));
+		// assertEquals("001111111011100000000000000000000",
+		// alu.floatMultiplication("00111111010100000000000000000000",
+		// "10111111001000000000000000000000",23, 8));
+	}
+
+	// 20
+	@Test
+	public void testFloatDivision() {
+		assertEquals("00111111011000000000000000000000", alu.floatDivision(
+				"00111110111000000000000000000000",
+				"00111111000000000000000000000000", 23, 8));
+		assertEquals("10111100001111000101001001100100", alu.floatDivision(
+				"00111111010000000000000000000000",
+				"11000010100000101000000000000000", 23, 8));
+	}
 }
-	
-	

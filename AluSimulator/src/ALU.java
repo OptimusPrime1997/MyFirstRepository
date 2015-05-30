@@ -1,5 +1,7 @@
 import org.omg.CosNaming.NamingContextExtPackage.StringNameHelper;
 
+import sun.security.util.Length;
+
 import com.sun.jndi.toolkit.ctx.StringHeadTail;
 import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
 
@@ -12,6 +14,82 @@ public class ALU {
 	public enum Type {
 		INTEGER, FLOAT, DECIMAL
 	};
+
+	// 1
+	public String calculation(String formula) {
+		assert formula != null;
+		String result = "";
+		String[] operand = new String[2];
+		String[] interval = new String[2];
+		String oper1="";
+		String oper2="";
+		String temp="";
+		String formula1 = "";
+		String bin1 = "";
+		String bin2 = "";
+		String eS1 = "";
+		String eS2 = "";
+		String sigS1 = "";
+		String sigS2 = "";
+		String sigT = "";
+		String sigS2N = "";
+		String sigS = "";
+		String sigST = "";
+		String rS = "";
+		String sig = "";
+		String all = "";
+
+		String temp1 = "";
+		int sigInt1 = 0;
+		int sigInt2 = 0;
+		int eInt1 = 0;
+		int eInt2 = 0;
+		int eInt = 0;
+		int standard = 0;
+		if (!formula.contains("-")
+				|| (formula.contains("-") && equals(!formula.contains("\\(")))) {
+			operand = formula.split("\\+|\\*|-|\\/|=");
+		} else if (formula.contains("\\(") && formula.contains("\\(")) {
+			if (formula.indexOf(0) == '(') {
+				operand[0] = formula.substring(formula.indexOf("\\(") + 1,
+						formula.indexOf("\\)"));
+				interval = formula.split(operand[0]
+						+ "|\\(|\\)|\\+|-|\\*|\\/|=");
+				operand[1] = interval[0];
+			} else {
+				operand[1] = formula.substring(formula.indexOf("\\(") + 1,
+						formula.indexOf("\\)"));
+				interval = formula.split(operand[1]
+						+ "|\\(|\\)|\\+|-|\\*|\\/|=");
+				operand[0] = interval[0];
+			}
+
+		}
+		if ((!operand[0].contains(".")) && (!operand[1].contains("."))) {
+			oper1=integerRepresentation(operand[0], 32);
+			oper2=integerRepresentation(operand[1], 32);
+			if (formula.contains("+")) {
+				temp=integerAddition(oper1, oper2, '0', 32);
+			} else if (formula.contains("*")) {
+
+			} else if (formula.contains("/")) {
+
+			} else {
+
+			}
+		} else {
+			if (formula.contains("+")) {
+
+			} else if (formula.contains("*")) {
+
+			} else if (formula.contains("/")) {
+
+			} else {
+
+			}
+		}
+		return result;
+	}
 
 	// 2
 	public String integerRepresentation(String number, int length) {
@@ -1079,14 +1157,10 @@ public class ALU {
 		String sigS1 = "";
 		String sigS2 = "";
 		String sigT = "";
-
-		String sigS2N = "";
-		String sigS = "";
 		String sigST = "";
-		String rS = "";
-		String sig = "";
-		int sigInt1 = 0;
-		int sigInt2 = 0;
+		String all = "";
+		String temp = "";
+		String temp1 = "";
 		int eInt1 = 0;
 		int eInt2 = 0;
 		int eInt = 0;
@@ -1106,23 +1180,22 @@ public class ALU {
 			eInt2++;
 		}
 		if ((!(operand1.substring(1).contains("1")))
-				&&(!(operand2.substring(1).contains("1")))) {
-			result="NaN";
-		}else if((!(operand1.substring(1).contains("1")))){
-			result+=operand1.charAt(0);
+				&& (!(operand2.substring(1).contains("1")))) {
+			result = "NaN";
+		} else if ((!(operand1.substring(1).contains("1")))) {
+			result += operand1.charAt(0);
 			for (int i = 1; i < 1 + eLength + sLength; i++) {
 				result += "0";
 			}
-		}else if((!(operand2.substring(1).contains("1")))){
-			result+=operand1.charAt(0);
-			for (int i = 0; i < sLength+eLength; i++) {
-				if(i<eLength)
-					result+="1";
+		} else if ((!(operand2.substring(1).contains("1")))) {
+			result += operand1.charAt(0);
+			for (int i = 0; i < sLength + eLength; i++) {
+				if (i < eLength)
+					result += "1";
 				else
 					result += "0";
 			}
-		}else {
-			
+		} else {
 			eInt = eInt1 - eInt2 + (standard - 1);
 			if (eS1.contains("1"))
 				sigS1 = "1"
@@ -1140,16 +1213,77 @@ public class ALU {
 				sigS2 = "0"
 						+ operand2
 								.substring(1 + eLength, 1 + eLength + sLength);
-			sigS=intergerDivision("0"+sigS1, "0"+sigS2, sLength+2);
-		}
-		return null;
-	}
+			all = sigS1;
+			for (int i = all.length(); i < sigS1.length() * 2; i++) {
+				all += "0";
+			}
+			for (int i = 0; i < sigS1.length(); i++) {
+				if (all.substring(0, 1 + sLength).compareTo(sigS2) >= 0) {
+					temp = integerSubtraction(all.substring(0, 1 + sLength),
+							sigS2, 1 + sLength).substring(0, sLength + 1);
+					temp1 = temp
+							+ all.substring(1 + sLength, (1 + sLength) * 2)
+							+ "1";
+					all = leftShift(temp1, 1).substring(0, (1 + sLength) * 2);
+				} else {
 
-	//
-	public String Calculation(String number1, String number2, Type type,
-			Operation operation, int length) {
-		String result = "";
-		return null;
+					all = leftShift(all, 1).substring(0, (1 + sLength) * 2);
+				}
+
+			}
+			sigST = all.substring(1 + sLength, 2 * (1 + sLength));
+			eInt = eInt - sigST.indexOf("1");
+			if (eInt >= (standard * 2 - 1)) {
+				if (operand1.charAt(0) == operand2.charAt(0))
+					result += "0";
+				else
+					result += "1";
+				for (int i = 0; i < eLength + sLength; i++) {
+					if (i < eLength)
+						result += "1";
+					else
+						result += "0";
+				}
+			} else if (eInt < (1 - sLength)) {
+				if (operand1.charAt(0) == operand2.charAt(0))
+					result += "0";
+				else
+					result += "1";
+				for (int i = 0; i < eLength + sLength; i++) {
+					result += "0";
+				}
+			} else if (eInt > 0 && eInt < (standard * 2 - 1)) {
+				sigT = sigST.substring(sigST.indexOf("1"));
+				for (int i = sigT.length(); i < 1 + sLength; i++) {
+					sigT += "0";
+				}
+				sigT = sigT.substring(0, 1 + sLength);
+				if (operand1.charAt(0) == operand2.charAt(0))
+					result += "0";
+				else
+					result += "1";
+				result += integerRepresentation(eInt + "", eLength + 1)
+						.substring(1, 1 + eLength);
+				result += sigT.substring(1, 1 + sLength);
+			} else if (eInt <= 0 && eInt >= (1 - sLength)) {
+				sigT = sigST.substring(sigST.indexOf("1"));
+				for (int i = sigT.length(); i < 1 + sLength; i++) {
+					sigT += "0";
+				}
+				sigT = sigT.substring(0, 1 + sLength);
+				if (operand1.charAt(0) == operand2.charAt(0))
+					result += "0";
+				else
+					result += "1";
+				for (int i = 0; i < eLength; i++) {
+					result += "0";
+				}
+				result += sigT.substring(1, 1 + sLength);
+			}
+
+		}
+
+		return result;
 	}
 
 	// extra

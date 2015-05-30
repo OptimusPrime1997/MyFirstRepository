@@ -26,7 +26,12 @@ public class ALUTest {
 			assertEquals("01110000",
 					alu.rounding("011011111", 4, 3,1));
 		}
+		@Test	
+		public void testCalculation() {
+			assertEquals("-2", alu.calculation("5-(-7)="));
+			
 
+		}
 	// 2
 	@Test
 	public void testIntegerRepresentation() {
@@ -183,6 +188,7 @@ public class ALUTest {
 		assertEquals("11101111", alu.intergerDivision("1001", "0011", 4));
 		assertEquals("00100001", alu.intergerDivision("0111", "0011", 4));
 		assertEquals("11100001", alu.intergerDivision("0111", "1101", 4));
+		
 	}
 	// 17
 	@Test
@@ -235,9 +241,16 @@ public class ALUTest {
 //					alu.floatMultiplication("00111111010100000000000000000000",
 //"10111111001000000000000000000000",23, 8));
 		}
-	@Test
-	public void testCalculation() {
-
-	}
-
+		//20
+				@Test
+				public void testFloatDivision(){
+					assertEquals("00111111011000000000000000000000",
+							alu.floatDivision("00111110111000000000000000000000",
+		"00111111000000000000000000000000",23, 8));
+					assertEquals("10111100001111000101001001100100",
+							alu.floatDivision("00111111010000000000000000000000",
+		"11000010100000101000000000000000",23, 8));
+				}
 }
+	
+	

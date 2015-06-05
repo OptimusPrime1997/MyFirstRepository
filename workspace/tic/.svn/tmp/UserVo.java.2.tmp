@@ -1,0 +1,19 @@
+package com.tic.timeee.vo;
+
+//import com.tic.timeee.po.UserPo;
+
+public class UserVo {
+	
+	int userID;
+	String userName;
+	
+	public UserVo(){};
+	
+	public String getUsername(){
+		return userName;
+	}
+	public 
+	public void setUsername(String name){
+		userName=name;
+	}
+}

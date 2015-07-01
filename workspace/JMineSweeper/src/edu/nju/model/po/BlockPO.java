@@ -44,12 +44,15 @@ public class BlockPO {
 		if(gameState == GameState.OVER){//当游戏为结束状态时
 			if(state == BlockState.CLICK&&isMine){
 				dbs = DisplayBlockState.Bomb;
+				System.out.println("+++Bomb");
 			}
 			else if((state == BlockState.UNCLICK)&&isMine){
 				dbs = DisplayBlockState.MINE;
+				System.out.println("MINE");
 			}
 			else if(state == BlockState.FLAG&&(!isMine)){
 				dbs = DisplayBlockState.ERROFLAG;
+				System.out.println("ERROFLAG");
 			}
 		}
 

@@ -13,6 +13,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Observable;
 
@@ -60,9 +61,15 @@ import javax.swing.UIManager;
 
 
 
+import javax.swing.plaf.basic.BasicBorders.MarginBorder;
+
+import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
+import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
+
 import edu.nju.controller.impl.MenuControllerImpl;
 import edu.nju.controller.service.MenuControllerService;
 import edu.nju.model.impl.UpdateMessage;
+import edu.nju.model.po.BlockPO;
 import edu.nju.model.state.GameResultState;
 import edu.nju.model.vo.BlockVO;
 import edu.nju.model.vo.GameVO;
@@ -104,6 +111,8 @@ public class MainFrame implements Observer {
 	private int defaultHeight = 9;
 	private CoreListener coreListener;
 	private MenuListener menuListener;
+	
+	private MineBoardPanel mineBoardPanel;
 	//End of variables declaration
 
 	public MainFrame() {
@@ -149,6 +158,8 @@ public class MainFrame implements Observer {
 		body = new MineBoardPanel(defaultHeight,defaultWidth);
 		coreListener = new CoreListener(this);
 		menuListener = new MenuListener(this);
+		
+		mineBoardPanel=new MineBoardPanel();
 	}
 	
 	/**
@@ -328,7 +339,7 @@ public class MainFrame implements Observer {
 			restart(gameHeight,gameWidth,level);
 			startButton.setIcon(Images.START_RUN);
 		}else if(notifingObject.getKey().equals("end")){
-			
+			startButton.setIcon(Images.START_END);
 		}
 	}
 
@@ -387,6 +398,6 @@ public class MainFrame implements Observer {
 		mainFrame.validate();
 		mainFrame.repaint();
 	}
-
+	
 }
 

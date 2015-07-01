@@ -88,7 +88,9 @@ public class GameModelImpl extends BaseModel implements GameModelService{
 	public boolean setGameLevel(String level) {
 		// TODO Auto-generated method stub
 		//输入校验
-		this.level = level;
+		if(level.equals("小")||level.equals("中")||level.equals("大")){
+				this.level = level;
+		}
 		return true;
 	}
 
@@ -96,9 +98,13 @@ public class GameModelImpl extends BaseModel implements GameModelService{
 	public boolean setGameSize(int width, int height, int mineNum) {
 		// TODO Auto-generated method stub
 		//输入校验
-		this.width = width;
-		this.height = height;
-		this.mineNum = mineNum;
+		if((width>=9&&width<=30)&&(height>=9&&height<=24)){
+			this.width = width;
+			this.height = height;
+			if(mineNum>=10&&mineNum<=668){
+				this.mineNum = mineNum;
+			}
+		}
 		return true;
 	}
 	
@@ -111,7 +117,5 @@ public class GameModelImpl extends BaseModel implements GameModelService{
 		// TODO Auto-generated method stub
 		return this.levelList;
 	}
-	public GameState getGameState(){
-		return this.gameState;
-	}
+	
 }

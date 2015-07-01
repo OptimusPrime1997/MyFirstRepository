@@ -1,5 +1,7 @@
 package edu.nju.model.data;
 
+
+
 import edu.nju.model.po.StatisticPO;
 
 /**
@@ -8,12 +10,25 @@ import edu.nju.model.po.StatisticPO;
  *
  */
 public class StatisticData {
+	private StatisticPO statisticPO;
+	public StatisticData(StatisticPO sPO){
+		this.statisticPO=sPO;
+	}
+	
 	
 	public StatisticPO getStatistic(){
-		return null;
+		return statisticPO;
 	}
 	
 	public boolean saveStatistic(StatisticPO statistic){
+		String temp="";
+		temp+=(statistic.getWinrate()+",");
+		temp+=(statistic.getWins()+",");
+		temp+=(statistic.getSum()+",");
+		temp+=(statistic.getLevel()+",");
+		temp+=(statistic.getWidth()+",");
+		temp+=(statistic.getHeight()+",");
+//		temp+=(statistic.get)
 		return false;
 	}
 

@@ -7,4 +7,5 @@ public interface MenuControllerService {
 	 */
 	public boolean startGame();
 
+	public boolean setRecordDialog();
 }

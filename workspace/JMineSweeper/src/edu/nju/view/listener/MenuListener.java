@@ -7,6 +7,7 @@ package edu.nju.view.listener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import edu.nju.controller.impl.MenuControllerImpl;
@@ -46,7 +47,7 @@ public class MenuListener implements ActionListener{
 		} else if (e.getSource() == ui.getMenuItem("exit")) {
 			System.exit(0);
 		} else if (e.getSource() == ui.getMenuItem("record")) {//统计胜率信息
-			
+			menuController.setRecordDialog();
 		}else if(e.getSource() == ui.getMenuItem("host")){//注册成为主机
 			
 		}else if(e.getSource() == ui.getMenuItem("client")){//注册成为客户端

@@ -85,11 +85,13 @@ public class MainFrame implements Observer {
 
 	private MineBoardPanel mineBoardPanel;
 
+	private Thread thread;
 	
 
 	// End of variables declaration
 
 	public MainFrame() {
+		
 		try {
 			UIManager
 					.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
@@ -100,7 +102,7 @@ public class MainFrame implements Observer {
 		initComponents();
 		mainFrame.setVisible(true);
 		Timer timer=new Timer();
-		Thread thread=new Thread(timer);
+		thread=new Thread(timer);
 		thread.start();
 	}
 
@@ -321,7 +323,7 @@ public class MainFrame implements Observer {
 			restart(gameHeight, gameWidth, level);
 			startButton.setIcon(Images.START_RUN);
 		} else if (notifingObject.getKey().equals("end")) {
-		
+			thread.stop();
 			startButton.setIcon(Images.START_END);
 		}
 	}

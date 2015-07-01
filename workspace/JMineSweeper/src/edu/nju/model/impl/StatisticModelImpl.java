@@ -10,6 +10,8 @@ public class StatisticModelImpl extends BaseModel implements StatisticModelServi
 	
 	public StatisticModelImpl(){
 		//初始化Dao
+		
+		
 	}
 
 	@Override

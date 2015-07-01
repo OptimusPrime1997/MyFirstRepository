@@ -80,7 +80,7 @@ public class RecordDialog {
 			public void actionPerformed(ActionEvent e) {
 				clear = true;
 				int length = names.length;
-				for (int i = 0; i != length; ++i) {
+				for (int i = 0; i < length; i++) {
 					names[i] = "Unknow Name";
 					score[i] = 999;
 				}
@@ -115,12 +115,12 @@ public class RecordDialog {
 			super();
 			setBounds(0, 0, 290, 100);
 		}
-
+		
 		public void paintComponent(Graphics g) {
 			super.paintComponent(g);
 			g.setFont(new Font("Monospaced", Font.PLAIN, 12));
 			int length = names.length;
-			for (int i = 0; i != length; i++) {
+			for (int i = 0; i < length; i++) {
 				g.drawString(names[i], 20, 30 * (i + 1));
 				g.drawString(String.valueOf(score[i]),150, 30 * (i + 1));
 				g.drawString(rank[i], 230, 30 * (i + 1));

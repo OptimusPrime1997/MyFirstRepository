@@ -19,7 +19,24 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 
 public class RecordDialog {
+	private final String[] rank = { "Easy", "Hard", "Hell" };
+  	private JDialog dialog;
 
+	private JPanel panel;
+
+	private JButton okBtn;
+
+	private JButton clearBtn;
+
+	private JSeparator line;
+
+	private String names[];
+
+	private int score[];
+
+	private JPanel textPanel;
+
+	boolean clear;
 	/**
 	 *  
 	 */
@@ -111,22 +128,5 @@ public class RecordDialog {
 		}
 	}
 
-	private final String[] rank = { "Easy", "Hard", "Hell" };
-  	private JDialog dialog;
-
-	private JPanel panel;
-
-	private JButton okBtn;
-
-	private JButton clearBtn;
-
-	private JSeparator line;
-
-	private String names[];
-
-	private int score[];
-
-	private JPanel textPanel;
-
-	boolean clear;
+	
 }

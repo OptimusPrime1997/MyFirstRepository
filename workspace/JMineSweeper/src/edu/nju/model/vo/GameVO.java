@@ -16,17 +16,17 @@ public class GameVO implements Serializable{
 	private int height;
 	private String level;
 	
-	private GameResultState gameResultStae;
+	private GameResultState gameResultState;
 	private int time;
 
 	public GameVO(GameState gameState, int width, int height,
-			String level, GameResultState gameResultStae, int time) {
+			String level, GameResultState gameResultState, int time) {
 		super();
 		this.gameState = gameState;
 		this.width = width;
 		this.height = height;
 		this.level = level;
-		this.gameResultStae = gameResultStae;
+		this.gameResultState = gameResultState;
 		this.time = time;
 	}
 
@@ -62,12 +62,12 @@ public class GameVO implements Serializable{
 		this.level = level;
 	}
 
-	public GameResultState getGameResultStae() {
-		return gameResultStae;
+	public GameResultState getGameResultState() {
+		return gameResultState;
 	}
 
-	public void setGameResultStae(GameResultState gameResultStae) {
-		this.gameResultStae = gameResultStae;
+	public void setGameResultState(GameResultState gameResultState) {
+		this.gameResultState = gameResultState;
 	}
 
 	public int getTime() {

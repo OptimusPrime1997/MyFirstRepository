@@ -24,7 +24,7 @@ public class GameModelImpl extends BaseModel implements GameModelService{
 	private int mineNum;
 	private String level;
 	
-	private GameResultState gameResultStae;
+	private GameResultState gameResultState;
 	private int time;
 	
 	private long startTime;
@@ -75,7 +75,7 @@ public class GameModelImpl extends BaseModel implements GameModelService{
 		// TODO Auto-generated method stub
 		
 		this.gameState = GameState.OVER;
-		this.gameResultStae = result;
+		this.gameResultState = result;
 		this.time = (int)(Calendar.getInstance().getTimeInMillis() - startTime)/1000;
 		
 		this.statisticModel.recordStatistic(result, time);
@@ -88,7 +88,9 @@ public class GameModelImpl extends BaseModel implements GameModelService{
 	public boolean setGameLevel(String level) {
 		// TODO Auto-generated method stub
 		//输入校验
-		this.level = level;
+		if(level.equals("小")||level.equals("中")||level.equals("大")){
+				this.level = level;
+		}
 		return true;
 	}
 
@@ -96,14 +98,18 @@ public class GameModelImpl extends BaseModel implements GameModelService{
 	public boolean setGameSize(int width, int height, int mineNum) {
 		// TODO Auto-generated method stub
 		//输入校验
-		this.width = width;
-		this.height = height;
-		this.mineNum = mineNum;
+		if((width>=9&&width<=30)&&(height>=9&&height<=24)){
+			this.width = width;
+			this.height = height;
+			if(mineNum>=10&&mineNum<=668){
+				this.mineNum = mineNum;
+			}
+		}
 		return true;
 	}
 	
 	private GameVO convertToDisplayGame(){
-		return new GameVO(gameState, width, height,level, gameResultStae, time);
+		return new GameVO(gameState, width, height,level, gameResultState, time);
 	}
 
 	@Override
@@ -111,4 +117,5 @@ public class GameModelImpl extends BaseModel implements GameModelService{
 		// TODO Auto-generated method stub
 		return this.levelList;
 	}
+	
 }

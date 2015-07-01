@@ -36,7 +36,7 @@ public class MenuListener implements ActionListener{
 		if (e.getSource() == ui.getMenuItem("start")) {//生成游戏，默认生成简单游戏
 			menuController.startGame();
 		} else if (e.getSource() == ui.getMenuItem("easy")) {//生成简单游戏
-			
+			menuController.startGame();
 		} else if (e.getSource() == ui.getMenuItem("hard")) {//生成中等游戏
 			
 		} else if (e.getSource() == ui.getMenuItem("hell")) {//生成大型游戏

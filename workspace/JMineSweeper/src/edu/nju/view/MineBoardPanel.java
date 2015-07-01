@@ -57,6 +57,17 @@ public class MineBoardPanel extends JPanel implements Observer {
     					.setIcon(Images.getImageIconByState(displayBlock.getState()));
             	jLabelButtons[displayBlock.getY()][displayBlock.getX()].repaint();
             }
+		}else if(updateMessage.getKey().equals("end")){
+			System.out.println("end");
+			List<BlockVO> changedCells = (List<BlockVO>) updateMessage.getValue();
+			
+			BlockVO displayBlock;
+            for(int i=0;i<changedCells.size();i++){
+            	displayBlock = changedCells.get(i);
+            	jLabelButtons[displayBlock.getY()][displayBlock.getX()]
+    					.setIcon(Images.getImageIconByState(displayBlock.getState()));
+            	jLabelButtons[displayBlock.getY()][displayBlock.getX()].repaint();
+            }
 		}
 	}
 

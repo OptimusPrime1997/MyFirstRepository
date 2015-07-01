@@ -19,6 +19,8 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 	
 	private BlockPO[][] blockMatrix;
 
+	private GameModelImpl gameModelImpl;
+	public static  GameState gameState = GameState.RUN;
 	
 	public ChessBoardModelImpl(ParameterModelService parameterModel){
 		this.parameterModel = parameterModel;
@@ -30,10 +32,9 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 		/********************简单示例初始化方法，待完善********************/
 		blockMatrix = new BlockPO[width][height];
 		setBlock(mineNum);
-		
 		this.parameterModel.setMineNum(mineNum);
 		/***********请在删除上述内容的情况下，完成自己的内容****************/
-		
+//	已写
 		this.printBlockMatrix();
 		
 		return false;
@@ -43,23 +44,46 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 	public boolean excavate(int x, int y) {
 		// TODO Auto-generated method stub
 		/********************简单示例挖开方法，待完善********************/
-		if(blockMatrix == null)
-			return false;
-		
-		List<BlockPO> blocks = new ArrayList<BlockPO>();
-		BlockPO block = blockMatrix[x][y];
-		
-		block.setState(BlockState.CLICK);
-		blocks.add(block);
-		
-		GameState gameState = GameState.RUN;
-		if(block.isMine()){
-			gameState = GameState.OVER;
-			this.gameModel.gameOver(GameResultState.FAIL);
+		if(gameState==GameState.RUN){
+			if(blockMatrix == null)
+				return false;
+			
+			List<BlockPO> blocks = new ArrayList<BlockPO>();
+			BlockPO block = blockMatrix[x][y];
+			BlockState state = block.getState();
+			if(state == BlockState.UNCLICK||state == BlockState.FLAG){
+				block.setState(BlockState.CLICK);
+				if(blockMatrix[x][y].getMineNum()==0){
+					int width = blockMatrix.length;
+					int height = blockMatrix[0].length;
+					for(int tempI = x-1;tempI<=x+1;tempI++){
+						for(int tempJ = y-1;tempJ<=y+1;tempJ++){
+							if((tempI>=0&&tempI<width)&&(tempJ>=0&&tempJ<height)){
+								if(blockMatrix[tempI][tempJ].getState()==BlockState.UNCLICK){
+									excavate(tempI, tempJ);
+								}
+							}
+						}
+					}
+				}
+				if(state==BlockState.FLAG){
+					this.parameterModel.minusMineNum();
+				}
+			}
+			blocks.add(block);
+			
+			
+			
+			if(block.isMine()){
+				gameState = GameState.OVER;
+				this.gameModel.gameOver(GameResultState.FAIL);
+				super.updateChange(new UpdateMessage("end",this.getDisplayList(blocks, gameState)));
+			}else{
+				super.updateChange(new UpdateMessage("excute",this.getDisplayList(blocks, gameState)));
+			}
 		}
-		
-		super.updateChange(new UpdateMessage("excute",this.getDisplayList(blocks, gameState)));			
 		/***********请在删除上述内容的情况下，完成自己的内容****************/
+//		已写
 		return true;
 	}
 	
@@ -67,26 +91,28 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 	public boolean mark(int x, int y) {
 		// TODO Auto-generated method stub
 		/********************简单示例标记方法，待完善********************/
-		if(blockMatrix == null)
-			return false;
-		
-		List<BlockPO> blocks = new ArrayList<BlockPO>();
-		BlockPO block = blockMatrix[x][y];
-		 
-		BlockState state = block.getState();
-		if(state == BlockState.UNCLICK){
-			block.setState(BlockState.FLAG);
-			this.parameterModel.minusMineNum();
+		if(gameState==GameState.RUN){
+			if(blockMatrix == null)
+				return false;
+			
+			List<BlockPO> blocks = new ArrayList<BlockPO>();
+			BlockPO block = blockMatrix[x][y];
+			 
+			BlockState state = block.getState();
+			if(state == BlockState.UNCLICK){
+				block.setState(BlockState.FLAG);
+				this.parameterModel.minusMineNum();
+			}
+			else if(state == BlockState.FLAG){
+				block.setState(BlockState.UNCLICK);
+				this.parameterModel.addMineNum();
+			}
+			
+			blocks.add(block);	
+			super.updateChange(new UpdateMessage("excute",this.getDisplayList(blocks, GameState.RUN)));
+			/***********请在删除上述内容的情况下，完成自己的内容****************/
+	//		已写
 		}
-		else if(state == BlockState.FLAG){
-			block.setState(BlockState.UNCLICK);
-			this.parameterModel.addMineNum();
-		}
-		
-		blocks.add(block);	
-		super.updateChange(new UpdateMessage("excute",this.getDisplayList(blocks, GameState.RUN)));
-		/***********请在删除上述内容的情况下，完成自己的内容****************/
-		
 		return true;
 	}
 
@@ -94,7 +120,34 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 	public boolean quickExcavate(int x, int y) {
 		// TODO Auto-generated method stub
 		/***********请在此处完成快速挖开方法实现****************/
-		
+		if(gameState==GameState.RUN){
+			int width = blockMatrix.length;
+			int height = blockMatrix[0].length;
+			if(blockMatrix[x][y].getState()==BlockState.CLICK){
+				int flagCount=0;
+				for(int tempI = x-1;tempI<=x+1;tempI++){
+					for(int tempJ = y-1;tempJ<=y+1;tempJ++){
+						if((tempI>=0&&tempI<width)&&(tempJ>=0&&tempJ<height)){
+							if(blockMatrix[tempI][tempJ].getState()==BlockState.FLAG){
+								flagCount++;
+							}
+						}
+					}
+				}
+				if(blockMatrix[x][y].getMineNum()==flagCount){
+					
+					for(int tempI = x-1;tempI<=x+1;tempI++){
+						for(int tempJ = y-1;tempJ<=y+1;tempJ++){
+							if((tempI>=0&&tempI<width)&&(tempJ>=0&&tempJ<height)){
+								if(blockMatrix[tempI][tempJ].getState()==BlockState.UNCLICK){
+									excavate(tempI, tempJ);
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 		return false;
 	}
 
@@ -110,29 +163,23 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 		int width = blockMatrix.length;
 		int height = blockMatrix[0].length;
 		
-		int index = 0;
-		
+
 		//初始化及布雷
 		for(int i = 0 ; i<width; i++){
 			for (int j = 0 ; j< height; j++){
 				blockMatrix[i][j] = new BlockPO(i,j);
-				//放置雷，并设定block附近雷数，现有放置方法为固定方法，请添加随机实现
-				index ++;
-				if(index == 2){
-					if(mineNum>0){
-						if(i>3&&j>3){
-							blockMatrix[i-1][j-1].setMine(true);
-						
-							addMineNum(i-1,j-1);
-							mineNum--;
-						}
-					}
-					index = 0;
-				}
-				
 			}
 		}
-		
+		for (int i = 0; i < mineNum;) {
+			int x = (int) (Math.random() * width);
+			int y = (int) (Math.random() * height);
+
+			if (blockMatrix[x][y].isMine()!=true) {
+				blockMatrix[x][y].setMine(true);
+				addMineNum(x, y);
+				i++;
+			}
+		}
 		
 		return false;
 	}
@@ -149,12 +196,11 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 		int width = blockMatrix.length;
 		int height = blockMatrix[0].length;
 		
-		int tempI = i-1;		
+				
 		
-		for(;tempI<=i+1;tempI++){
-			int tempJ = j-1;
-			for(;tempJ<=j+1;tempJ++){
-				if((tempI>-1&&tempI<width)&&(tempJ>-1&&tempJ<height)){
+		for(int tempI = i-1;tempI<=i+1;tempI++){
+			for(int tempJ = j-1;tempJ<=j+1;tempJ++){
+				if((tempI>=0&&tempI<width)&&(tempJ>=0&&tempJ<height)){
 //					System.out.println(i+";"+j+":"+tempI+";"+tempJ+":");
 					blockMatrix[tempI][tempJ].addMine();
 				}
@@ -171,11 +217,24 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 	 */
 	private List<BlockVO> getDisplayList(List<BlockPO> blocks, GameState gameState){
 		List<BlockVO> result = new ArrayList<BlockVO>();
-		for(BlockPO block : blocks){
-			if(block != null){
-				BlockVO displayBlock = block.getDisplayBlock(gameState);
-				if(displayBlock.getState() != null)
-				result.add(displayBlock);
+		if(gameState==GameState.RUN){
+			for(BlockPO block : blocks){
+				if(block != null){
+					BlockVO displayBlock = block.getDisplayBlock(gameState);
+					if(displayBlock.getState() != null)
+						result.add(displayBlock);
+				}
+			}
+		}else if(gameState==GameState.OVER){
+			for(int i=0;i<blockMatrix.length;i++){
+				for(int j=0;j<blockMatrix[0].length;j++){
+					if(blockMatrix[i][j]!=null){
+						BlockVO displayBlock=blockMatrix[i][j].getDisplayBlock(gameState);
+						if(displayBlock.getState()!=null){
+							result.add(displayBlock);
+						}
+					}
+				}
 			}
 		}
 		return result;

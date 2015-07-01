@@ -5,6 +5,8 @@
 package edu.nju.main;
 
  
+import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
+
 import edu.nju.controller.impl.MenuControllerImpl;
 import edu.nju.controller.msgqueue.OperationQueue;
 import edu.nju.controller.service.MenuControllerService;
@@ -15,8 +17,9 @@ import edu.nju.model.impl.StatisticModelImpl;
 import edu.nju.view.MainFrame;
 
 public class JMineSweeper {
-
+	
 	static MenuControllerService menuController = new MenuControllerImpl();
+	
 	public static void main(String[] args) {
 		
 		MainFrame ui = new MainFrame();

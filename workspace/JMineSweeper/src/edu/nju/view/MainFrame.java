@@ -31,7 +31,6 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-
 import javax.swing.plaf.basic.BasicBorders.MarginBorder;
 
 import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
@@ -39,9 +38,11 @@ import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 import edu.nju.controller.impl.MenuControllerImpl;
 import edu.nju.controller.service.MenuControllerService;
+import edu.nju.model.impl.ChessBoardModelImpl;
 import edu.nju.model.impl.UpdateMessage;
 import edu.nju.model.po.BlockPO;
 import edu.nju.model.state.GameResultState;
+import edu.nju.model.state.GameState;
 import edu.nju.model.vo.BlockVO;
 import edu.nju.model.vo.GameVO;
 import edu.nju.view.listener.CoreListener;
@@ -329,7 +330,7 @@ public class MainFrame implements Observer {
 	}
 
 	private void restart(int mineBoardHeight, int mineBoardWidth, String type) {
-
+		ChessBoardModelImpl.gameState=GameState.RUN;
 		mainFrame.getContentPane().remove(body);
 		body = new MineBoardPanel(mineBoardHeight, mineBoardWidth);
 		head.setBounds(4, 5, mineBoardWidth * buttonSize + bodyMarginOther * 2

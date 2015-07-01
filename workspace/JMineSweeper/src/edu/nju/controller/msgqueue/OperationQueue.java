@@ -40,6 +40,7 @@ public class OperationQueue implements Runnable {
 			operation.execute();
 		}
 	}
+	
 
 	public static boolean addMineOperation(MineOperation operation) {
 		try {

@@ -24,7 +24,7 @@ public class GameModelImpl extends BaseModel implements GameModelService{
 	private int mineNum;
 	private String level;
 	
-	private GameResultState gameResultStae;
+	private GameResultState gameResultState;
 	private int time;
 	
 	private long startTime;
@@ -75,7 +75,7 @@ public class GameModelImpl extends BaseModel implements GameModelService{
 		// TODO Auto-generated method stub
 		
 		this.gameState = GameState.OVER;
-		this.gameResultStae = result;
+		this.gameResultState = result;
 		this.time = (int)(Calendar.getInstance().getTimeInMillis() - startTime)/1000;
 		
 		this.statisticModel.recordStatistic(result, time);
@@ -103,12 +103,15 @@ public class GameModelImpl extends BaseModel implements GameModelService{
 	}
 	
 	private GameVO convertToDisplayGame(){
-		return new GameVO(gameState, width, height,level, gameResultStae, time);
+		return new GameVO(gameState, width, height,level, gameResultState, time);
 	}
 
 	@Override
 	public List<GameLevel> getGameLevel() {
 		// TODO Auto-generated method stub
 		return this.levelList;
+	}
+	public GameState getGameState(){
+		return this.gameState;
 	}
 }

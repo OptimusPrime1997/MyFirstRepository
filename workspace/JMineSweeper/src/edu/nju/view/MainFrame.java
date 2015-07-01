@@ -280,8 +280,7 @@ public class MainFrame implements Observer {
 		mainFrame.validate();
 		mainFrame.repaint();
 		easy.setSelected(true);
-		mainFrame
-				.setLocation((screenSize.width - head.getWidth()) / 2,
+		mainFrame.setLocation((screenSize.width - head.getWidth()) / 2,
 						(screenSize.height - aJMenuBar.getHeight()
 								- head.getHeight() - body.getHeight()) / 2);
 

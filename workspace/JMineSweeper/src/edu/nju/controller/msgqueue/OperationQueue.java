@@ -2,9 +2,11 @@ package edu.nju.controller.msgqueue;
 
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
+
 import edu.nju.controller.msgqueue.operation.MineOperation;
 import edu.nju.model.service.ChessBoardModelService;
 import edu.nju.model.service.GameModelService;
+import edu.nju.model.state.GameState;
 
 /**
  * 操作队列，所有的操作需要加入队列，该队列自行按操作到达的先后顺序处理操作。
@@ -22,14 +24,16 @@ public class OperationQueue implements Runnable {
 
 	private static ChessBoardModelService chessBoard;
 	private static GameModelService gameModel;
-
+	
+	GameState gameState=edu.nju.model.impl.ChessBoardModelImpl.gameState;
+	
 	public OperationQueue(ChessBoardModelService chess, GameModelService game) {
 		queue = new ArrayBlockingQueue<MineOperation>(1000);
 		isRunning = true;
 
 		chessBoard = chess;
 		gameModel = game;
-
+		
 	}
 
 	@Override
@@ -39,6 +43,8 @@ public class OperationQueue implements Runnable {
 			MineOperation operation = getNewMineOperation();
 			operation.execute();
 		}
+		
+		
 	}
 	
 

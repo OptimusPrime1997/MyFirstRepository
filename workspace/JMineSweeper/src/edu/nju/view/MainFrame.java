@@ -31,35 +31,6 @@ import javax.swing.JPanel;
 import javax.swing.JLabel;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 import javax.swing.plaf.basic.BasicBorders.MarginBorder;
 
@@ -79,9 +50,9 @@ import edu.nju.view.listener.MenuListener;
 import java.util.Observer;
 
 public class MainFrame implements Observer {
-	
-	//Variables declaration
-	private JFrame mainFrame; 
+
+	// Variables declaration
+	private JFrame mainFrame;
 	private JPanel head;
 	private JMenuBar aJMenuBar;
 	private JMenu game;
@@ -111,9 +82,12 @@ public class MainFrame implements Observer {
 	private int defaultHeight = 9;
 	private CoreListener coreListener;
 	private MenuListener menuListener;
-	
+
 	private MineBoardPanel mineBoardPanel;
-	//End of variables declaration
+
+	
+
+	// End of variables declaration
 
 	public MainFrame() {
 		try {
@@ -125,10 +99,12 @@ public class MainFrame implements Observer {
 		componentsInstantiation();
 		initComponents();
 		mainFrame.setVisible(true);
-
+		Timer timer=new Timer();
+		Thread thread=new Thread(timer);
+		thread.start();
 	}
 
-	//Instantiation of components
+	// Instantiation of components
 	private void componentsInstantiation() {
 		mainFrame = new JFrame();
 		head = new JPanel();
@@ -146,22 +122,22 @@ public class MainFrame implements Observer {
 		hard = new JCheckBoxMenuItem();
 		hell = new JCheckBoxMenuItem();
 		custom = new JCheckBoxMenuItem();
- 		record = new JMenuItem();
+		record = new JMenuItem();
 		exit = new JMenuItem();
 		online = new JMenu();
 		host = new JMenuItem();
 		client = new JMenuItem();
-		
-		menuItemMap = new HashMap<String,JMenuItem>();
+
+		menuItemMap = new HashMap<String, JMenuItem>();
 		group = new ButtonGroup();
-		
-		body = new MineBoardPanel(defaultHeight,defaultWidth);
+
+		body = new MineBoardPanel(defaultHeight, defaultWidth);
 		coreListener = new CoreListener(this);
 		menuListener = new MenuListener(this);
-		
-		mineBoardPanel=new MineBoardPanel();
+
+		mineBoardPanel = new MineBoardPanel();
 	}
-	
+
 	/**
 	 * This method is called from within the constructor to initialize the form.
 	 */
@@ -171,7 +147,7 @@ public class MainFrame implements Observer {
 		mainFrame.setResizable(false);
 		game.setText("Game");
 
-		//build menu bar
+		// build menu bar
 		group.add(easy);
 		group.add(hard);
 		group.add(hell);
@@ -219,59 +195,60 @@ public class MainFrame implements Observer {
 		menuItemMap.put("exit", exit);
 
 		aJMenuBar.add(game);
-		
+
 		online.setText("online");
 		host.setText("registe as host");
 		host.addActionListener(menuListener);
 		online.add(host);
 		menuItemMap.put("host", host);
-		
+
 		client.setText("registe as client");
 		client.addActionListener(menuListener);
 		online.add(client);
 		menuItemMap.put("client", client);
-		
+
 		aJMenuBar.add(online);
 		mainFrame.setJMenuBar(aJMenuBar);
-		//build menu bar end
+		// build menu bar end
 
 		mainFrame.getContentPane().setLayout(null);
 
-		//build head panel
+		// build head panel
 		head.setBorder(new javax.swing.border.TitledBorder(null, "",
 				javax.swing.border.TitledBorder.CENTER,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION));
 		head.setLayout(null);
 
 		startButton.setIcon(Images.START_BEGIN);
-        startButton.addActionListener(coreListener);
+		startButton.addActionListener(coreListener);
 		Font font = new Font("Serif", Font.BOLD, 12);
 		mineNumberLabel.setFont(font);
 		time.setFont(font);
 
 		mineNumberLabel.setHorizontalAlignment(JLabel.CENTER);
-        time.setHorizontalAlignment(JLabel.CENTER);
-		
-        mineNumberLabel.setText("剩余雷数");
+		time.setHorizontalAlignment(JLabel.CENTER);
+
+		mineNumberLabel.setText("剩余雷数");
 		time.setText("0");
 
 		head.add(mineNumberLabel);
 		head.add(startButton);
 		head.add(time);
-		mainFrame.getContentPane().add(head);	
-		//build head panel end
+		mainFrame.getContentPane().add(head);
+		// build head panel end
 
-		//build body panel
+		// build body panel
 		mainFrame.getContentPane().add(body);
-		//build body panel end
-		
+		// build body panel end
+
 		mainFrame.setTitle("JMineSweeper");
-		mainFrame.setIconImage(Images.FRAME_IMAGE);		
+		mainFrame.setIconImage(Images.FRAME_IMAGE);
 		java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit()
 				.getScreenSize();
-		
-		//build head, and body in detail  
-		head.setBounds(4, 5, body.getColumns() * buttonSize + bodyMarginOther * 2 - 4, 65);
+
+		// build head, and body in detail
+		head.setBounds(4, 5, body.getColumns() * buttonSize + bodyMarginOther
+				* 2 - 4, 65);
 		startButton.setBounds((head.getWidth() - 50) / 2,
 				(head.getHeight() - 50) / 2, 50, 50);
 		mineNumberLabel.setBounds(0, 0, head.getHeight(), head.getHeight());
@@ -279,25 +256,27 @@ public class MainFrame implements Observer {
 				head.getHeight());
 
 		body.setBounds(2, head.getHeight(), body.getColumns() * buttonSize + 2
-				* bodyMarginOther, body.getRows() * buttonSize + bodyMarginNorth
-				+ bodyMarginOther);
+				* bodyMarginOther, body.getRows() * buttonSize
+				+ bodyMarginNorth + bodyMarginOther);
 		body.setBorder(new javax.swing.border.TitledBorder(
 				new javax.swing.border.TitledBorder(""), "Challenge Yourself!",
 				javax.swing.border.TitledBorder.CENTER,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION));
 		mainFrame.getContentPane().add(body);
-		mainFrame.setSize(body.getWidth() + 10, body.getHeight()
-				+ head.getHeight() + 60);
+		mainFrame.setSize(body.getWidth() + 10,
+				body.getHeight() + head.getHeight() + 60);
 		mainFrame.validate();
 		mainFrame.repaint();
 		easy.setSelected(true);
-		mainFrame.setLocation((screenSize.width - head.getWidth()) / 2,
+		mainFrame
+				.setLocation(
+						(screenSize.width - head.getWidth()) / 2,
 						(screenSize.height - aJMenuBar.getHeight()
 								- head.getHeight() - body.getHeight()) / 2);
 
 		mainFrame.addWindowListener(new WindowAdapter() {
 			public void windowClosing(WindowEvent e) {
-				
+
 			}
 		});
 	}
@@ -311,43 +290,48 @@ public class MainFrame implements Observer {
 			return null;
 		return (JMenuItem) menuItemMap.get(name);
 	}
-	
-	public MineBoardPanel getMineBoard(){
+
+	public MineBoardPanel getMineBoard() {
 		return this.body;
 	}
-	public MineNumberLabel getMineNumberLabel(){
+
+	public MineNumberLabel getMineNumberLabel() {
 		return this.mineNumberLabel;
 	}
 
-	public JButton getStartButton(){
+	public JButton getStartButton() {
 		return this.startButton;
 	}
+
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see java.util.Observer#update(java.util.Observable, java.lang.Object)
 	 * 游戏gameModel发生变化体现在这里
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-		
-		UpdateMessage notifingObject = (UpdateMessage)arg;
-		if(notifingObject.getKey().equals("start")){
+	
+		UpdateMessage notifingObject = (UpdateMessage) arg;
+		if (notifingObject.getKey().equals("start")) {
 			GameVO newGame = (GameVO) notifingObject.getValue();
 			int gameWidth = newGame.getWidth();
 			int gameHeight = newGame.getHeight();
-			String level = newGame.getLevel();		
-			restart(gameHeight,gameWidth,level);
+			String level = newGame.getLevel();
+			restart(gameHeight, gameWidth, level);
 			startButton.setIcon(Images.START_RUN);
-		}else if(notifingObject.getKey().equals("end")){
+		} else if (notifingObject.getKey().equals("end")) {
+		
 			startButton.setIcon(Images.START_END);
 		}
 	}
 
-	private void restart(int mineBoardHeight,int mineBoardWidth,String type) {
+	private void restart(int mineBoardHeight, int mineBoardWidth, String type) {
 
 		mainFrame.getContentPane().remove(body);
-		body = new MineBoardPanel(mineBoardHeight,mineBoardWidth);
-		head.setBounds(4, 5, mineBoardWidth * buttonSize + bodyMarginOther * 2 - 4, 65);
+		body = new MineBoardPanel(mineBoardHeight, mineBoardWidth);
+		head.setBounds(4, 5, mineBoardWidth * buttonSize + bodyMarginOther * 2
+				- 4, 65);
 		startButton.setBounds((head.getWidth() - 50) / 2,
 				(head.getHeight() - 50) / 2, 50, 50);
 		mineNumberLabel.setBounds(0, 0, head.getHeight(), head.getHeight());
@@ -355,49 +339,74 @@ public class MainFrame implements Observer {
 				head.getHeight());
 
 		body.setBounds(2, head.getHeight(), mineBoardWidth * buttonSize + 2
-				* bodyMarginOther, mineBoardHeight * buttonSize + bodyMarginNorth
-				+ bodyMarginOther);
+				* bodyMarginOther, mineBoardHeight * buttonSize
+				+ bodyMarginNorth + bodyMarginOther);
 		body.setBorder(new javax.swing.border.TitledBorder(
 				new javax.swing.border.TitledBorder(""), "Challenge Yourself!",
 				javax.swing.border.TitledBorder.CENTER,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION));
 		mainFrame.getContentPane().add(body);
-		mainFrame.setSize(body.getWidth() + 10, body.getHeight()
-				+ head.getHeight() + 60);
+		mainFrame.setSize(body.getWidth() + 10,
+				body.getHeight() + head.getHeight() + 60);
 		time.setText("0");
-		
-		if(type == null){
+
+		if (type == null) {
 			custom.setSelected(true);
-		}
-		else if(type.equals("小")){
+		} else if (type.equals("小")) {
 			easy.setSelected(true);
-		}
-		else if(type.equals("中")){
+		} else if (type.equals("中")) {
 			hard.setSelected(true);
-		}
-		else if(type.equals("大")){
+		} else if (type.equals("大")) {
 			hell.setSelected(true);
-		}
-		else{
+		} else {
 			custom.setSelected(true);
 		}
-//		switch (type) {
-//		case "小":
-//			easy.setSelected(true);
-//			break;
-//		case "中":
-//			hard.setSelected(true);
-//			break;
-//		case "大":
-//			hell.setSelected(true);
-//			break;
-//		default:
-//			custom.setSelected(true);
-//			break;
-//		}
+		// switch (type) {
+		// case "小":
+		// easy.setSelected(true);
+		// break;
+		// case "中":
+		// hard.setSelected(true);
+		// break;
+		// case "大":
+		// hell.setSelected(true);
+		// break;
+		// default:
+		// custom.setSelected(true);
+		// break;
+		// }
 		mainFrame.validate();
 		mainFrame.repaint();
 	}
-	
-}
+	public JLabel getTimer(){
+		return time;
+	}
 
+	class Timer implements Runnable{
+		private int count;
+		public void run() {
+			// TODO Auto-generated method stub
+			while (true) {
+				int seconds;
+				String msg = "";
+				seconds = (int) (count);
+				if(seconds<100&&seconds>=10){
+					msg += "0" + seconds;
+				}else if (seconds < 10) {
+					msg += "00" + seconds;
+				} else {
+					msg += seconds;
+				}
+				time.setText(msg);
+				count++;
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+	
+			}
+		}
+		
+	}
+}

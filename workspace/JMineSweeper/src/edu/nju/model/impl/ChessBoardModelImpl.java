@@ -20,7 +20,7 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 	private BlockPO[][] blockMatrix;
 
 	private GameModelImpl gameModelImpl;
-	static  GameState gameState = GameState.RUN;
+	public static  GameState gameState = GameState.RUN;
 	
 	public ChessBoardModelImpl(ParameterModelService parameterModel){
 		this.parameterModel = parameterModel;

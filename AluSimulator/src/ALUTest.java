@@ -180,14 +180,34 @@ public class ALUTest {
 		assertEquals("00101010", alu.integerMultiplication("1001", "1010", 4));
 		assertEquals("11101011", alu.integerMultiplication("0111", "1101", 4));
 	}
+	// 15.0
+		@Test
+		public void testintegerMultiplicationQuick() {
+			assertEquals("00001111", alu.integerMultiplicationQuick("0101", "0011", 4));
+			assertEquals("00101010", alu.integerMultiplicationQuick("1001", "1010", 4));
+			assertEquals("11101011", alu.integerMultiplicationQuick("0111", "1101", 4));
+			assertEquals("00011001", alu.integerMultiplicationQuick("0101", "0101", 4));
+			assertEquals("00110001", alu.integerMultiplicationQuick("0111", "0111", 4));
+			assertEquals("00000001", alu.integerMultiplicationQuick("1111", "1111", 4));	}
 
 	// 16
 	@Test
 	public void testIntegerDivision() {
-		assertEquals("11101111", alu.intergerDivision("1001", "0011", 4));
-		assertEquals("00100001", alu.intergerDivision("0111", "0011", 4));
-		assertEquals("11100001", alu.intergerDivision("0111", "1101", 4));
-
+		assertEquals("11101111", alu.integerDivision("1001", "0011", 4));
+		assertEquals("00100001", alu.integerDivision("0111", "0011", 4));
+		assertEquals("11100001", alu.integerDivision("0111", "1101", 4));
+		assertEquals("00000011", alu.integerDivision("0011", "0100", 4));
+		assertEquals("00001101", alu.integerDivision("1101", "1100", 4));
+//		assertEquals("00010000", alu.integerDivision("1101", "1101", 4)); 
+		//-3/£¨-3£©=1
+//		assertEquals("00010000", alu.integerDivision("1111", "1111", 4));
+		// -1/£¨-1£©=0.¡£¡££¨-1£©
+//		assertEquals("11010000", alu.integerDivision("1010", "0010", 4));
+		//-6/2=-2.¡£¡££¨-2£©
+		assertEquals("00000110", alu.integerDivision("0110", "1001", 4));
+//		6/(-7)=0...6
+		assertEquals("11010000", alu.integerDivision("0110", "1110", 4));
+//		6/(-2)=(-3)
 	}
 
 	// 17

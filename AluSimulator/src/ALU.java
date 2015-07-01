@@ -66,7 +66,7 @@ public class ALU {
 				temp = integerMultiplication(oper1, oper2, 32);
 				result = integerTrueValue(temp);
 			} else if (formula.contains("/")) {
-				temp = intergerDivision(oper1, oper2, 32);
+				temp = integerDivision(oper1, oper2, 32);
 				result = integerTrueValue(temp.substring(0, 32));
 			} else {
 				temp = integerSubtraction(oper1, oper2, 32);
@@ -664,8 +664,93 @@ public class ALU {
 		return result;
 	}
 
+	// 15.0
+	public String integerMultiplicationQuick(String operand1, String operand2,
+			int length) {
+		assert (operand1.length() <= length) && (operand2.length() <= length)
+				&& (operand1 != null) && (operand2 != null);
+		String result = "";
+		String oper1 = operand1;
+		String oper2 = operand2;
+		String oper1N = "";
+		String oper1Negation = "";
+		String all = "";
+		String temp = "";
+		int lengths = 0;
+		int y0 = 0;
+		int y1 = 0;
+		int y2 = 0;
+		int judge = 0;
+		if (length % 2 != 0) {
+			lengths = length + 1;
+		} else {
+			lengths = length+2;
+		}
+		if (operand1.length() < lengths) {
+			for (int j = 0; j < lengths - operand1.length(); j++) {
+				if (operand1.charAt(0) == '0') {
+					oper1 = "0" + oper1;
+				} else if (operand1.charAt(0) == '1') {
+					oper1 = "1" + oper1;
+				}
+			}
+		}
+		if (operand2.length() < lengths) {
+			for (int j = 0; j < lengths - operand2.length(); j++) {
+				if (operand2.charAt(0) == '0') {
+					oper2 = "0" + oper2;
+				} else if (operand2.charAt(0) == '1') {
+					oper2 = "1" + oper2;
+				}
+			}
+		}
+		oper1N = negation(oper1);
+		oper1Negation = integerAddition("0", oper1N, '1', oper1.length())
+				.substring(0, oper1N.length());
+		all = oper2;
+		for (int i = all.length(); i < lengths * 2; i++) {
+			all = "0" + all;
+		}
+		all += "0";
+
+		for (int i = 0; i < lengths / 2; i++) {
+			y0 = Integer.parseInt(all.charAt(lengths * 2) + "");
+			y1 = Integer.parseInt(all.charAt(lengths * 2 - 1) + "");
+			y2 = Integer.parseInt(all.charAt(lengths * 2 - 2) + "");
+			judge = y0 + y1 - 2 * y2;
+			if (judge == -2) {
+				temp = integerAddition(leftShift(oper1Negation, 1),
+						all.substring(0, lengths), '0', lengths);
+			} else if (judge == -1) {
+				temp = integerAddition(oper1Negation,
+						all.substring(0, lengths), '0', lengths);
+			} else if (judge == 0) {
+				temp = integerAddition("0", all.substring(0, lengths), '0',
+						lengths);
+			} else if (judge == 1) {
+				temp = integerAddition(oper1, all.substring(0, lengths), '0',
+						lengths);
+			} else if (judge == 2) {
+				temp = integerAddition(leftShift(oper1, 1),
+						all.substring(0, lengths), '0', lengths);
+			}
+
+			StringBuffer sb = new StringBuffer(all);
+			sb.replace(0, lengths, temp.substring(0, temp.length() - 1));
+			all = sb.toString();
+			all = rightAriShift(all, 2);
+		}
+
+		if (length % 2 != 0) {
+			result = all.substring(2, lengths * 2);
+		} else {
+			result = all.substring(4, lengths * 2);
+		}
+		return result;
+	}
+
 	// 16
-	public String intergerDivision(String operand1, String operand2, int length) {
+	public String integerDivision(String operand1, String operand2, int length) {
 		assert (operand1.length() <= length) && (operand2.length() <= length)
 				&& (operand1 != null) && (operand2 != null);
 		String result = "";

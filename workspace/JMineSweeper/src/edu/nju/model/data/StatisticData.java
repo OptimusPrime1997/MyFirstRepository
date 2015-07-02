@@ -2,6 +2,10 @@ package edu.nju.model.data;
 
 
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 import edu.nju.model.po.StatisticPO;
 
 /**
@@ -21,14 +25,22 @@ public class StatisticData {
 	}
 	
 	public boolean saveStatistic(StatisticPO statistic){
-		String temp="";
-		temp+=(statistic.getWinrate()+",");
-		temp+=(statistic.getWins()+",");
-		temp+=(statistic.getSum()+",");
-		temp+=(statistic.getLevel()+",");
-		temp+=(statistic.getWidth()+",");
-		temp+=(statistic.getHeight()+",");
-//		temp+=(statistic.get)
+		String tempData="";
+		tempData+=(statistic.getWinrate()+",");
+		tempData+=(statistic.getWins()+",");
+		tempData+=(statistic.getSum()+",");
+		tempData+=(statistic.getLevel()+",");
+		tempData+=(statistic.getWidth()+",");
+		tempData+=(statistic.getHeight()+",");
+		
+		File file=new File("./save.txt");
+		try{
+			FileWriter writer=new FileWriter(file);
+			writer.write(tempData);
+			writer.close();
+		}catch(IOException e){
+			e.printStackTrace();
+		}
 		return false;
 	}
 

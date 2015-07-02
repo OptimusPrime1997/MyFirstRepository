@@ -12,6 +12,11 @@ import edu.nju.view.listener.CoreListener;
 
 @SuppressWarnings("serial")
 public class MineBoardPanel extends JPanel implements Observer {
+	private final int buttonSize = 16;
+
+	private final int bodyMarginNorth = 20;
+
+	private final int bodyMarginOther = 12;
 	
 	static MyButton[][] jLabelButtons;
 	private static int rows;//height
@@ -46,6 +51,8 @@ public class MineBoardPanel extends JPanel implements Observer {
 	@Override
 	public void update(Observable o, Object arg) { 
 		//如果棋盘发生变化要体现在这边
+		int tempMineNum=0;
+		boolean isWin=false;
 		UpdateMessage updateMessage = (UpdateMessage) arg;
 		if(updateMessage.getKey().equals("excute")){
 			System.out.println("mark changed");
@@ -59,6 +66,7 @@ public class MineBoardPanel extends JPanel implements Observer {
             }
 		}else if(updateMessage.getKey().equals("end")){
 			System.out.println("end");
+			
 			List<BlockVO> changedCells = (List<BlockVO>) updateMessage.getValue();
 			
 			BlockVO displayBlock;
@@ -108,10 +116,6 @@ public class MineBoardPanel extends JPanel implements Observer {
 		MineBoardPanel.columns = columns;
 	}
 	
-	private final int buttonSize = 16;
-
-	private final int bodyMarginNorth = 20;
-
-	private final int bodyMarginOther = 12;
+	
 
 }

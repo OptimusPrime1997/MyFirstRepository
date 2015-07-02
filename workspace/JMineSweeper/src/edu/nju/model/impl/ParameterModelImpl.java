@@ -40,7 +40,6 @@ public class ParameterModelImpl extends BaseModel implements ParameterModelServi
 			mineNum++;
 			return false;
 		}
-		
 		super.updateChange(new UpdateMessage("mineNum", mineNum));
 		return true;
 	}

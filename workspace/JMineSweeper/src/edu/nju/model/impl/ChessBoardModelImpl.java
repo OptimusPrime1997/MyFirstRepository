@@ -3,6 +3,8 @@ package edu.nju.model.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.sun.org.apache.regexp.internal.recompile;
+
 import edu.nju.model.po.BlockPO;
 import edu.nju.model.service.ChessBoardModelService;
 import edu.nju.model.service.GameModelService;
@@ -19,8 +21,8 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 	
 	private BlockPO[][] blockMatrix;
 
-	private GameModelImpl gameModelImpl;
 	public static  GameState gameState = GameState.RUN;
+	private GameModelImpl gameModelImpl;
 	
 	public ChessBoardModelImpl(ParameterModelService parameterModel){
 		this.parameterModel = parameterModel;
@@ -51,7 +53,7 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 			List<BlockPO> blocks = new ArrayList<BlockPO>();
 			BlockPO block = blockMatrix[x][y];
 			BlockState state = block.getState();
-			if(state == BlockState.UNCLICK||state == BlockState.FLAG){
+			if(state == BlockState.UNCLICK){
 				block.setState(BlockState.CLICK);
 				if(blockMatrix[x][y].getMineNum()==0){
 					int width = blockMatrix.length;
@@ -66,21 +68,32 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 						}
 					}
 				}
-				if(state==BlockState.FLAG){
-					this.parameterModel.minusMineNum();
-				}
 			}
 			blocks.add(block);
-			
-			
 			
 			if(block.isMine()){
 				gameState = GameState.OVER;
 				this.gameModel.gameOver(GameResultState.FAIL);
-				super.updateChange(new UpdateMessage("end",this.getDisplayList(blocks, gameState)));
-			}else{
-				super.updateChange(new UpdateMessage("excute",this.getDisplayList(blocks, gameState)));
+				
 			}
+			
+			if(gameState!=GameState.OVER){
+				gameState=GameState.OVER;
+				for(int i=0;i<blockMatrix.length;i++){
+					for(int j=0;j<blockMatrix[0].length;j++){
+						if(blockMatrix[i][j].getState()==BlockState.UNCLICK){
+							gameState=GameState.RUN;
+							break;
+						}
+					}
+				}
+				if(gameState==GameState.OVER){
+					this.gameModel.gameOver(GameResultState.SUCCESS);
+				}
+			}
+			
+				super.updateChange(new UpdateMessage("excute",this.getDisplayList(blocks, gameState)));
+			
 		}
 		/***********请在删除上述内容的情况下，完成自己的内容****************/
 //		已写
@@ -108,7 +121,22 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 				this.parameterModel.addMineNum();
 			}
 			
-			blocks.add(block);	
+			blocks.add(block);
+			if(gameState!=GameState.OVER){
+				gameState=GameState.OVER;
+				for(int i=0;i<blockMatrix.length;i++){
+					for(int j=0;j<blockMatrix[0].length;j++){
+						if(blockMatrix[i][j].getState()==BlockState.UNCLICK){
+							gameState=GameState.RUN;
+							break;
+						}
+					}
+				}
+				if(gameState==GameState.OVER){
+					this.gameModel.gameOver(GameResultState.SUCCESS);
+				}
+			}
+			
 			super.updateChange(new UpdateMessage("excute",this.getDisplayList(blocks, GameState.RUN)));
 			/***********请在删除上述内容的情况下，完成自己的内容****************/
 	//		已写
@@ -245,6 +273,7 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 		// TODO Auto-generated method stub
 		this.gameModel = gameModel;
 	}
+	
 	
 	private void printBlockMatrix(){
 		for(BlockPO[] blocks : this.blockMatrix){

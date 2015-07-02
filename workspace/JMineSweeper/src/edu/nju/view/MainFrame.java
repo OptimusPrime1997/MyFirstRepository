@@ -232,7 +232,7 @@ public class MainFrame implements Observer {
 		time.setHorizontalAlignment(JLabel.CENTER);
 
 		mineNumberLabel.setText("剩余雷数");
-		time.setText("0");
+		time.setText("000");
 
 		head.add(mineNumberLabel);
 		head.add(startButton);
@@ -317,16 +317,21 @@ public class MainFrame implements Observer {
 	
 		UpdateMessage notifingObject = (UpdateMessage) arg;
 		if (notifingObject.getKey().equals("start")) {
-			GameVO newGame = (GameVO) notifingObject.getValue();
-			int gameWidth = newGame.getWidth();
-			int gameHeight = newGame.getHeight();
-			String level = newGame.getLevel();
+			GameVO newGame1 = (GameVO) notifingObject.getValue();
+			int gameWidth = newGame1.getWidth();
+			int gameHeight = newGame1.getHeight();
+			String level = newGame1.getLevel();
 			restart(gameHeight, gameWidth, level);
 			startButton.setIcon(Images.START_RUN);
 		} else if (notifingObject.getKey().equals("end")) {
 			thread.stop();
-			startButton.setIcon(Images.START_END);
-		}
+			GameVO newGame2 = (GameVO) notifingObject.getValue();
+			if(newGame2.getGameResultState()==GameResultState.FAIL){
+				startButton.setIcon(Images.START_END);
+			}else if(newGame2.getGameResultState()==GameResultState.SUCCESS){
+				startButton.setIcon(Images.START_BEGIN);
+			}
+			}
 	}
 
 	private void restart(int mineBoardHeight, int mineBoardWidth, String type) {

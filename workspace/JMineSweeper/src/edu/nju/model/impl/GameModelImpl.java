@@ -3,6 +3,11 @@ package edu.nju.model.impl;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.logging.Level;
+
+import sun.security.util.Length;
+
+import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
 
 import edu.nju.model.service.ChessBoardModelService;
 import edu.nju.model.service.GameModelService;
@@ -22,7 +27,7 @@ public class GameModelImpl extends BaseModel implements GameModelService{
 	private int width;
 	private int height;
 	private int mineNum;
-	private String level;
+	private static String level;
 	
 	private GameResultState gameResultState;
 	private int time;
@@ -88,7 +93,8 @@ public class GameModelImpl extends BaseModel implements GameModelService{
 	public boolean setGameLevel(String level) {
 		// TODO Auto-generated method stub
 		//输入校验
-		if(level.equals("小")||level.equals("中")||level.equals("大")){
+		if(level.equals("小")||level.equals("中")
+				||level.equals("大")||(level.equals("自定义"))){
 				this.level = level;
 		}
 		return true;
@@ -116,6 +122,9 @@ public class GameModelImpl extends BaseModel implements GameModelService{
 	public List<GameLevel> getGameLevel() {
 		// TODO Auto-generated method stub
 		return this.levelList;
+	}
+	public static String  getLevel(){
+		return level;
 	}
 	
 }

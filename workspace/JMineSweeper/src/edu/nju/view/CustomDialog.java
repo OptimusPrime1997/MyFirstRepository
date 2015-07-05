@@ -11,34 +11,70 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+
+import edu.nju.controller.impl.MenuControllerImpl;
+import edu.nju.controller.service.MenuControllerService;
+import edu.nju.model.impl.GameModelImpl;
+import edu.nju.view.listener.MenuListener;
 
 public class CustomDialog {
 
 	/**
 	 *  
 	 */
-	public CustomDialog(JFrame parent){
+	private JFrame parent;
+
+	private JPanel panel;
+
+	private JDialog dialog;
+
+	// private JFormattedTextField widthField;
+	private JTextField widthField;
+
+	private JTextField heightField;
+
+	private JTextField mineNumberField;
+
+	private JLabel widthLabel;
+
+	private JLabel heightLabel;
+
+	private JLabel mineNumberLabel;
+
+	private JButton okBtn;
+
+	private JButton cancelBtn;
+
+	private boolean ok=false;
+
+	private int width;
+
+	private int height;
+
+	private int mineNumber;
+	
+	public static int[] widHeiNum=new int[3];
+
+	public CustomDialog(JFrame parent) {
 		super();
 		ok = false;
-		
+
 		panel = new JPanel();
 		dialog = new JDialog(parent, "custom", true);
 		widthField = new JTextField();
 		heightField = new JTextField();
 		mineNumberField = new JTextField();
-		
-		
+
 		widthLabel = new JLabel("Width");
 		heightLabel = new JLabel("Height");
 		mineNumberLabel = new JLabel("Mine");
 		okBtn = new JButton("ok");
 		cancelBtn = new JButton("cancel");
-		
+
 		Font font = new Font("Monospaced", Font.PLAIN, 12);
 		widthLabel.setFont(font);
 		heightLabel.setFont(font);
@@ -60,8 +96,18 @@ public class CustomDialog {
 		okBtn.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				parse();
 				ok = true;
 				dialog.setVisible(false);
+			
+				widHeiNum[0]=width;
+				widHeiNum[1]=height;
+				widHeiNum[2]=mineNumber;
+				System.out.println("++"+widHeiNum[0]+"+"+widHeiNum[1]+"+"+widHeiNum[2]+"+"+edu.nju.view.listener.MenuListener.message);
+				edu.nju.view.listener.MenuListener.message="custom";
+				System.out.println("++"+widHeiNum[0]+"+"+widHeiNum[1]+"+"+widHeiNum[2]+"+"+edu.nju.view.listener.MenuListener.message);
+				 MenuControllerService menuController1=new MenuControllerImpl();
+				 menuController1.startGame();
 			}
 
 		});
@@ -85,27 +131,27 @@ public class CustomDialog {
 		panel.add(cancelBtn);
 
 		dialog.setContentPane(panel);
-		this.parent = parent;
+		dialog.setBounds(parent.getX() + 50, parent.getY() + 50, 215, 175);
+		dialog.setVisible(true);
+//		this.parent = parent;
 	}
-	
-	
+
 	public CustomDialog(JFrame parent, int width, int height, int mineNumber) {
 		super();
 		ok = false;
-		
+
 		panel = new JPanel();
 		dialog = new JDialog(parent, "custom", true);
 		widthField = new JTextField(String.valueOf(width));
 		heightField = new JTextField(String.valueOf(height));
 		mineNumberField = new JTextField(String.valueOf(mineNumber));
-		
-		
+
 		widthLabel = new JLabel("Width");
 		heightLabel = new JLabel("Height");
 		mineNumberLabel = new JLabel("Mine");
 		okBtn = new JButton("ok");
 		cancelBtn = new JButton("cancel");
-		
+
 		Font font = new Font("Monospaced", Font.PLAIN, 12);
 		widthLabel.setFont(font);
 		heightLabel.setFont(font);
@@ -127,11 +173,22 @@ public class CustomDialog {
 		okBtn.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				parse();
 				ok = true;
 				dialog.setVisible(false);
+				
+				widHeiNum[0]=width;
+				widHeiNum[1]=height;
+				widHeiNum[2]=mineNumber;
+				System.out.println("++"+widHeiNum[0]+"+"+widHeiNum[1]+"+"+widHeiNum[2]+"+"+edu.nju.view.listener.MenuListener.message);
+				edu.nju.view.listener.MenuListener.message="custom";
+				System.out.println("++"+widHeiNum[0]+"+"+widHeiNum[1]+"+"+widHeiNum[2]+"+"+edu.nju.view.listener.MenuListener.message);
+				 MenuControllerService menuController1=new MenuControllerImpl();
+				 menuController1.startGame();
 			}
 
 		});
+		
 
 		cancelBtn.addActionListener(new ActionListener() {
 
@@ -152,14 +209,14 @@ public class CustomDialog {
 		panel.add(cancelBtn);
 
 		dialog.setContentPane(panel);
-		this.parent = parent;
+		dialog.setBounds(parent.getX() + 50, parent.getY() + 50, 215, 175);
+//		this.parent = parent;
 	}
 
 	public boolean show() {
 		ok = false;
-		dialog.setBounds(parent.getX() + 50, parent.getY() + 50, 215, 175);
 		dialog.setVisible(true);
-		parse();
+		
 		return ok;
 	}
 
@@ -193,54 +250,27 @@ public class CustomDialog {
 		if (width < 9) {
 			width = 9;
 			widthField.setText("9");
-		} else if (width > 50) {
-			width = 50;
-			widthField.setText("50");
+		} else if (width > 30) {
+			width = 30;
+			widthField.setText("30");
 		}
 
-		if (height < 1) {
-			height = 1;
-			heightField.setText("1");
-		} else if (height > 30) {
-			height = 30;
-			heightField.setText("30");
+		if (height < 9) {
+			height = 9;
+			heightField.setText("9");
+		} else if (height > 24) {
+			height = 24;
+			heightField.setText("24");
+		}if(mineNumber>668&&mineNumber<height*width){
+			mineNumber=668;
+			mineNumberField.setText(String.valueOf(mineNumber));
 		}
 
-		if (mineNumber > height * width || mineNumber < 1) {
+		if (mineNumber >= height * width || mineNumber < 1) {
 			mineNumber = height * width / 7;
 			mineNumberField.setText(String.valueOf(mineNumber));
 		}
 
 	}
 
-	private JFrame parent;
-
-	private JPanel panel;
-
-	private JDialog dialog;
-
-	//private JFormattedTextField widthField;
-	private JTextField widthField;
-
-	private JTextField heightField;
-
-	private JTextField mineNumberField;
-
-	private JLabel widthLabel;
-
-	private JLabel heightLabel;
-
-	private JLabel mineNumberLabel;
-
-	private JButton okBtn;
-
-	private JButton cancelBtn;
-
-	private boolean ok;
-
-	private int width;
-
-	private int height;
-
-	private int mineNumber;
 }

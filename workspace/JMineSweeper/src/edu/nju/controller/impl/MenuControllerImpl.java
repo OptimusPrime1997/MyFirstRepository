@@ -5,10 +5,13 @@ import javax.swing.JFrame;
 import edu.nju.controller.msgqueue.OperationQueue;
 import edu.nju.controller.msgqueue.operation.StartGameOperation;
 import edu.nju.controller.service.MenuControllerService;
+import edu.nju.view.CustomDialog;
+import edu.nju.view.MainFrame;
 import edu.nju.view.RecordDialog;
 
 public class MenuControllerImpl implements MenuControllerService{
-	private JFrame jFrame;
+	protected static String message;
+	
 	@Override
 	public boolean startGame() {
 		// TODO Auto-generated method stub
@@ -16,8 +19,13 @@ public class MenuControllerImpl implements MenuControllerService{
 		return true;
 	}
 	public boolean setRecordDialog(){
-		jFrame=new JFrame();
+		JFrame jFrame=new JFrame();
 		RecordDialog recordDialog=new RecordDialog(jFrame);
+		return true;
+	}
+	public boolean setCustomDialog(MainFrame frame){
+		CustomDialog customDialog=new CustomDialog(frame);
+		customDialog.show();
 		return true;
 	}
 

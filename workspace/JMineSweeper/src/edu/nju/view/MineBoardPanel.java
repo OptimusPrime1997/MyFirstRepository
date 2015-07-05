@@ -51,8 +51,6 @@ public class MineBoardPanel extends JPanel implements Observer {
 	@Override
 	public void update(Observable o, Object arg) { 
 		//如果棋盘发生变化要体现在这边
-		int tempMineNum=0;
-		boolean isWin=false;
 		UpdateMessage updateMessage = (UpdateMessage) arg;
 		if(updateMessage.getKey().equals("excute")){
 			System.out.println("mark changed");

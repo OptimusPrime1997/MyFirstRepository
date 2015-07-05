@@ -2,74 +2,96 @@ package edu.nju.model.po;
 
 public class StatisticPO {
 
-	private double winrate;
-	private int wins;
-	private int sum;
-	private int level;
-	private int width;
-	private int height;
-	
+	private int littleWins;
+	private int littleSum;
+	private int middleWins;
+	private int middleSum;
+	private int largeWins;
+	private int largeSum;
+	private int customerWins;
+	private int customerSum;
+
 	public StatisticPO() {
 		super();
 	}
 
-	public StatisticPO(double winrate, int wins, int sum, int level, int width,
-			int height) {
+	public StatisticPO(int littleWins, int littleSum, int middleWins,
+			int middleSum, int largeWins, int largeSum, int customerWins,
+			int customerSum) {
 		super();
-		this.winrate = winrate;
-		this.wins = wins;
-		this.sum = sum;
-		this.level = level;
-		this.width = width;
-		this.height = height;
+		this.littleWins = littleWins;
+		this.littleSum = littleSum;
+		this.middleWins = middleWins;
+		this.middleSum = middleSum;
+		this.largeWins = largeWins;
+		this.largeSum = largeSum;
+		this.customerWins = customerWins;
+
+		this.customerSum = customerSum;
+
 	}
 
-	public double getWinrate() {
-		return winrate;
+	public int getlittleWins() {
+		return littleWins;
 	}
 
-	public void setWinrate(double winrate) {
-		this.winrate = winrate;
+	public void setlittleWins(int littleWins) {
+		this.littleWins = littleWins;
 	}
 
-	public int getWins() {
-		return wins;
+	public int getmiddleWins() {
+		return middleWins;
 	}
 
-	public void setWins(int wins) {
-		this.wins = wins;
+	public void setmiddleWins(int middleWins) {
+		this.middleWins = middleWins;
 	}
 
-	public int getSum() {
-		return sum;
+	public int getlargeWins() {
+		return largeWins;
 	}
 
-	public void setSum(int sum) {
-		this.sum = sum;
+	public void setlargeWins(int largeWins) {
+		this.largeWins = largeWins;
 	}
 
-	public int getLevel() {
-		return level;
+	public int getcustomerWins() {
+		return customerWins;
 	}
 
-	public void setLevel(int level) {
-		this.level = level;
+	public void setcustomerWins(int customerWins) {
+		this.customerWins = customerWins;
 	}
 
-	public int getWidth() {
-		return width;
+	public int getlittleSum() {
+		return littleSum;
 	}
 
-	public void setWidth(int width) {
-		this.width = width;
+	public void setlittleSum(int littleSum) {
+		this.littleSum = littleSum;
 	}
 
-	public int getHeight() {
-		return height;
+	public int getmiddleSum() {
+		return middleSum;
 	}
 
-	public void setHeight(int height) {
-		this.height = height;
+	public void setmiddleSum(int middleSum) {
+		this.middleSum = middleSum;
 	}
-	
+
+	public int getlargeSum() {
+		return largeSum;
+	}
+
+	public void setlargeSum(int largeSum) {
+		this.largeSum = largeSum;
+	}
+
+	public int getcustomerSum() {
+		return customerSum;
+	}
+
+	public void setcustomerSum(int customerSum) {
+		this.customerSum = customerSum;
+	}
 }

@@ -24,16 +24,16 @@ public class OperationQueue implements Runnable {
 
 	private static ChessBoardModelService chessBoard;
 	private static GameModelService gameModel;
-	
-	GameState gameState=edu.nju.model.impl.ChessBoardModelImpl.gameState;
-	
+
+	GameState gameState = edu.nju.model.impl.ChessBoardModelImpl.gameState;
+
 	public OperationQueue(ChessBoardModelService chess, GameModelService game) {
 		queue = new ArrayBlockingQueue<MineOperation>(1000);
 		isRunning = true;
 
 		chessBoard = chess;
 		gameModel = game;
-		
+
 	}
 
 	@Override
@@ -43,10 +43,7 @@ public class OperationQueue implements Runnable {
 			MineOperation operation = getNewMineOperation();
 			operation.execute();
 		}
-		
-		
 	}
-	
 
 	public static boolean addMineOperation(MineOperation operation) {
 		try {

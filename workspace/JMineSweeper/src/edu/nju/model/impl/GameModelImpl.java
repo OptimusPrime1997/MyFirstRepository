@@ -97,6 +97,7 @@ public class GameModelImpl extends BaseModel implements GameModelService{
 				||level.equals("大")||(level.equals("自定义"))){
 				this.level = level;
 		}
+		System.out.println("+++"+level);
 		return true;
 	}
 
@@ -111,6 +112,7 @@ public class GameModelImpl extends BaseModel implements GameModelService{
 				this.mineNum = mineNum;
 			}
 		}
+		System.out.println("+++"+width+"++"+height+"++"+mineNum);
 		return true;
 	}
 	

@@ -50,8 +50,12 @@ import edu.nju.view.listener.MenuListener;
 
 import java.util.Observer;
 
-public class MainFrame implements Observer {
+public class MainFrame extends JFrame implements Observer {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	// Variables declaration
 	private JFrame mainFrame;
 	private JPanel head;
@@ -86,9 +90,10 @@ public class MainFrame implements Observer {
 
 	private MineBoardPanel mineBoardPanel;
 
-	private Thread thread;
-	
-
+	public static Thread thread;
+	public static boolean isFirstClick=true;
+	public static boolean isBlocked=false;
+	public static  int count;
 	// End of variables declaration
 
 	public MainFrame() {
@@ -104,7 +109,8 @@ public class MainFrame implements Observer {
 		mainFrame.setVisible(true);
 		Timer timer=new Timer();
 		thread=new Thread(timer);
-		thread.start();
+		timer.clearCount();
+//		thread.start();
 	}
 
 	// Instantiation of components
@@ -356,9 +362,10 @@ public class MainFrame implements Observer {
 		mainFrame.getContentPane().add(body);
 		mainFrame.setSize(body.getWidth() + 10,
 				body.getHeight() + head.getHeight() + 60);
-		time.setText("0");
+		time.setText("000");
+		isFirstClick=true;
 
-		if (type == null) {
+		if (type == "自定义") {
 			custom.setSelected(true);
 		} else if (type.equals("小")) {
 			easy.setSelected(true);
@@ -369,20 +376,6 @@ public class MainFrame implements Observer {
 		} else {
 			custom.setSelected(true);
 		}
-		// switch (type) {
-		// case "小":
-		// easy.setSelected(true);
-		// break;
-		// case "中":
-		// hard.setSelected(true);
-		// break;
-		// case "大":
-		// hell.setSelected(true);
-		// break;
-		// default:
-		// custom.setSelected(true);
-		// break;
-		// }
 		mainFrame.validate();
 		mainFrame.repaint();
 	}
@@ -391,7 +384,7 @@ public class MainFrame implements Observer {
 	}
 
 	class Timer implements Runnable{
-		private int count;
+		
 		public void run() {
 			// TODO Auto-generated method stub
 			while (true) {
@@ -414,6 +407,9 @@ public class MainFrame implements Observer {
 				}
 	
 			}
+		}
+		private void clearCount(){
+			count=0;
 		}
 		
 	}

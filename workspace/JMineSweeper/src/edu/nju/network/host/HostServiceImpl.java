@@ -15,6 +15,7 @@ public class HostServiceImpl extends HostService {
 		UpdateMessage msge = (UpdateMessage) arg;
 		String trigger_class = o.getClass().getName();
 		TransformObject obj = new TransformObject(trigger_class, msge);
+		System.out.println("Host——edu.nju.network.host.HostServiceImpl :"+trigger_class+"\n");
 		this.publishData(obj);
 	}
 

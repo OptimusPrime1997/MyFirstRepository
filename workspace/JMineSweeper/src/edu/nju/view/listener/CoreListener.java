@@ -36,15 +36,7 @@ public class CoreListener implements MouseListener, ActionListener {
 	
 		if(e.getSource()==ui.getStartButton()){//点击head中间的图标生成新游戏
 			
-			try {
-				edu.nju.view.MainFrame.thread.suspend();
-				edu.nju.view.MainFrame.count=0;
-				edu.nju.view.MainFrame.isBlocked=true;
-				
-			} catch (Exception e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			suspendTimer();
 //			edu.nju.view.MainFrame.thread.resume();
 			System.out.println("CoreAction action performed just for start Button");
 			menuController.startGame();			
@@ -116,6 +108,17 @@ public class CoreListener implements MouseListener, ActionListener {
 				edu.nju.view.MainFrame.thread.start();
 			}
 			edu.nju.view.MainFrame.isFirstClick=false;
+		}
+	}
+	public static void suspendTimer() {
+		try {
+			edu.nju.view.MainFrame.thread.suspend();
+			edu.nju.view.MainFrame.count=0;
+			edu.nju.view.MainFrame.isBlocked=true;
+			
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 	}
 

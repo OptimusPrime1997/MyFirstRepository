@@ -41,7 +41,6 @@ public class GameModelProxy extends ModelProxy implements GameModelService{
 		return false;
 	}
 
-
 	@Override
 	public List<GameLevel> getGameLevel() {
 		// TODO Auto-generated method stub

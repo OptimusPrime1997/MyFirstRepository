@@ -30,7 +30,6 @@ public class OperationQueue implements Runnable {
 	public OperationQueue(ChessBoardModelService chess, GameModelService game) {
 		queue = new ArrayBlockingQueue<MineOperation>(1000);
 		isRunning = true;
-
 		chessBoard = chess;
 		gameModel = game;
 

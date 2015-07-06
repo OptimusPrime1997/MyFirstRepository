@@ -32,7 +32,7 @@ public class RecordDialog {
 
 	private String names[];
 
-	private int score[];
+	private String score[];
 
 	private JPanel textPanel;
 	
@@ -47,7 +47,7 @@ public class RecordDialog {
 		initialization(parent);
 	}
 
-	public boolean show(String[] names, int[] score) {
+	public boolean show(String[] names, String[] score) {
 		clear = false;
 		this.names = names;
 		this.score = score;
@@ -58,7 +58,7 @@ public class RecordDialog {
 	public void show(){
 		dialog.setVisible(true);
 		this.names = new String[]{"UnKnown","UnKown","UnKnown","UnKnown"};
-		this.score = new int[]{0,0,0,0};
+		this.score = new String[]{"0/0","0/0","0/0","0/0"};
 		show(names,score);
 	}
 
@@ -85,7 +85,7 @@ public class RecordDialog {
 				int length = names.length;
 				for (int i = 0; i < length; i++) {
 					names[i] = "Unknow Name";
-					score[i] = 0;
+					score[i] = "0/0";
 				}
 				textPanel.repaint();
 				edu.nju.model.data.StatisticData.clearStatistics();
@@ -115,8 +115,8 @@ public class RecordDialog {
 			show();
 		}else{
 			String[] levelString={"Easy","Hard","Hell","Custom"};
-			int[] temp=new int[4];
-			for(int i=0;i<3;i++){
+			String[] temp=new String[4];
+			for(int i=0;i<4;i++){
 				temp[i]=statisticModelImpl.getRate()[i];
 			}
 			show(levelString,temp);

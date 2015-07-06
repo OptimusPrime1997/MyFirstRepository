@@ -320,8 +320,9 @@ public class MainFrame extends JFrame implements Observer {
 	 */
 	@Override
 	public void update(Observable o, Object arg) {
-	
+		
 		UpdateMessage notifingObject = (UpdateMessage) arg;
+		System.out.println("edu.nju.view.MainFrame -- "+notifingObject.getKey()+"\n");
 		if (notifingObject.getKey().equals("start")) {
 			GameVO newGame1 = (GameVO) notifingObject.getValue();
 			int gameWidth = newGame1.getWidth();

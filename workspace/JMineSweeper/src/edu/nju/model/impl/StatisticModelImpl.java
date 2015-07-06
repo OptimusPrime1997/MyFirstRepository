@@ -29,7 +29,7 @@ public class StatisticModelImpl extends BaseModel implements
 	private int middleSum;
 	private int largeSum;
 	private int customerSum;
-	private int[] rate = new int[4];
+	private String[] play = new String[4];
 
 	public StatisticModelImpl() {
 		// 初始化Dao
@@ -111,23 +111,14 @@ public class StatisticModelImpl extends BaseModel implements
 	@Override
 	public void showStatistics() {
 		// TODO Auto-generated method stub
-		int littleWinRate = 0;
-		int middleWinRate = 0;
-		int largeWinRate = 0;
-		int customerWinRate = 0;
-		littleWinRate = (int) (((littleWins + 0.0) / littleSum) * 100);
-		middleWinRate = (int) (((middleWins + 0.0) / middleSum) * 100);
-		largeWinRate = (int) (((largeWins + 0.0) / largeSum) * 100);
-		customerWinRate = (int) (((customerWins + 0.0) / customerSum) * 100);
-
-		rate[0] = littleWinRate;
-		rate[1] = middleWinRate;
-		rate[2] = largeWinRate;
-		rate[3] = customerWinRate;
+		play[0] = littleWins+"/"+littleSum;
+		play[1] = middleWins+"/"+middleSum;
+		play[2] = largeWins+"/"+largeSum;
+		play[3] = customerWins+"/"+customerSum;
 
 	}
-	public int[] getRate() {
-		return rate;
+	public String[] getRate() {
+		return play;
 	}
 
 }

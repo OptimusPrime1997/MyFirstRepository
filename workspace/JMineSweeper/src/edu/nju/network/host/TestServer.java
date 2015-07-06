@@ -15,7 +15,8 @@ public class TestServer {
 		HostServiceImpl host = new HostServiceImpl();
 		HostInHandlerImpl hostH = new HostInHandlerImpl();
 		
-		GameModelImpl game = new GameModelImpl(new StatisticModelImpl(),new ChessBoardModelImpl(new ParameterModelImpl()));
+		GameModelImpl game = new GameModelImpl(new StatisticModelImpl(),
+				new ChessBoardModelImpl(new ParameterModelImpl()));
 		game.addObserver(host);
 		if(host.init(hostH)){
 			System.out.println("Connecting!!!");
@@ -29,5 +30,4 @@ public class TestServer {
 		}
 			
 	}
-
 }

@@ -12,8 +12,7 @@ public class StartGameOperation extends MineOperation{
 		GameModelService game = OperationQueue.getGameModel();
 		if(tempString.equals("easy")){
 			game.setGameLevel("小");
-		}
-		if(tempString.equals("hard")){
+		}else if(tempString.equals("hard")){
 			game.setGameLevel("中");
 		}else if(tempString.equals("hell")){
 			game.setGameLevel("大");

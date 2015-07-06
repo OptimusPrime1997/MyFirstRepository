@@ -33,10 +33,10 @@ public class ClientThread extends Thread {
 				Object obj = reader.readObject();
 				
 				ClientAdapter.readData(obj);
-				
+				System.out.println("CLIENT read object!");
 				
 			} catch(SocketException se){
-				System.out.println("socket connection is closed!!!");
+				System.out.println("CLIENT socket connection is closed!!!");
 				this.close();
 				break;
 			}catch (IOException e1) {
@@ -48,7 +48,7 @@ public class ClientThread extends Thread {
 			}
 			
 			try {
-				Thread.sleep(50);
+				Thread.sleep(10);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -74,6 +74,7 @@ public class ClientThread extends Thread {
 		try {
 			out.writeObject(o);
 			out.flush();
+			System.out.println("CLIENT write object!");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

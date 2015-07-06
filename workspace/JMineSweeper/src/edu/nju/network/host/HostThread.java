@@ -18,7 +18,7 @@ public class HostThread extends Thread {
 		super();
 		
 		server = new ServerSocket(Configure.PORT);
-		System.out.println("Waiting for Client!!!");
+		System.out.println("Host Waiting for Client!!!");
 		client = server.accept();
 		reader = new ObjectInputStream(new BufferedInputStream(client.getInputStream()));
 		
@@ -34,12 +34,12 @@ public class HostThread extends Thread {
 			try {
 				Object obj = reader.readObject();
 				if(obj != null){
-					System.out.println("Got it!!!");
 					ServerAdapter.readData(obj);
+					System.out.println("HOST Read Object!");
 				}
 				
 			} catch(SocketException se){
-				System.out.println("socket connection is closed!!!");
+				System.out.println("HOST-CLIENT socket connection is closed!!!");
 				this.close();
 				break;
 			}catch (IOException e1) {
@@ -77,7 +77,7 @@ public class HostThread extends Thread {
 	public Object write(Object o) {
 		try {
 			out.writeObject(o);
-			System.out.println("序列化成功！");
+			System.out.println("HOST--序列化成功 write object");
 			out.flush();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

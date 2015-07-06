@@ -21,8 +21,8 @@ public class ModelProxy extends BaseModel implements Observer{
 		TransformObject obj = (TransformObject) arg;
 		String trigger_class = obj.getSource();
 		UpdateMessage msg = obj.getMsg();
-		System.out.println("GameModelProxy get the UpdateMessage! - " + msg.getKey());
-		System.out.println("Triiget class is " + trigger_class);
+		System.out.println("GameModelProxy get the UpdateMessage! -- " + msg.getKey()+"++++"+"Triiget class is " + trigger_class);
+		System.out.println();
 		Class<?> super_class = this.getClass().getInterfaces()[0];
 		System.out.println("super class is : " + super_class.getName());
 		try {

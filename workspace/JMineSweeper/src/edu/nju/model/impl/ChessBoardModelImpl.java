@@ -68,8 +68,9 @@ public class ChessBoardModelImpl extends BaseModel implements ChessBoardModelSer
 						}
 					}
 				}
+				blocks.add(block);
 			}
-			blocks.add(block);
+			
 			
 			if(block.isMine()){
 				gameState = GameState.OVER;

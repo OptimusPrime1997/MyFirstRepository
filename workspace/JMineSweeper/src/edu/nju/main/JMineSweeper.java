@@ -19,14 +19,17 @@ import edu.nju.view.MainFrame;
 public class JMineSweeper {
 	
 	static MenuControllerService menuController = new MenuControllerImpl();
-	
+	public static GameModelImpl gameModel;
+	public static MainFrame ui;
+	public static ParameterModelImpl mineNumberModel;
+	public static ChessBoardModelImpl mineBoardModel;
 	public static void main(String[] args) {
 		
-		MainFrame ui = new MainFrame();
+		ui = new MainFrame();
 		StatisticModelImpl statisticModel = new StatisticModelImpl();
- 		ParameterModelImpl mineNumberModel = new ParameterModelImpl();
- 		ChessBoardModelImpl mineBoardModel = new ChessBoardModelImpl(mineNumberModel);
-		GameModelImpl gameModel = new GameModelImpl(statisticModel,mineBoardModel);		
+ 		mineNumberModel = new ParameterModelImpl();
+ 		mineBoardModel = new ChessBoardModelImpl(mineNumberModel);
+		gameModel = new GameModelImpl(statisticModel,mineBoardModel);		
  		
 		gameModel.addObserver(ui);
  		mineNumberModel.addObserver(ui.getMineNumberLabel());

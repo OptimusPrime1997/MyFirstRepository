@@ -12,7 +12,6 @@ public abstract class HostService implements Observer{
 	public void close(){
 		ServerAdapter.close();
 	}
-	
 	public abstract void publishData(TransformObject o);
 
 }

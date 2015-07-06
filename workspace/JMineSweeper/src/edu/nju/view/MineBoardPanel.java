@@ -52,6 +52,7 @@ public class MineBoardPanel extends JPanel implements Observer {
 	public void update(Observable o, Object arg) { 
 		//如果棋盘发生变化要体现在这边
 		UpdateMessage updateMessage = (UpdateMessage) arg;
+		System.out.println("edu.nju.view.MineBoardPanel -- "+updateMessage.getKey()+"\n");
 		if(updateMessage.getKey().equals("excute")){
 			System.out.println("mark changed");
 			List<BlockVO> changedCells = (List<BlockVO>) updateMessage.getValue();

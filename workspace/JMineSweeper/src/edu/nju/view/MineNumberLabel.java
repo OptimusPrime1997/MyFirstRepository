@@ -19,6 +19,7 @@ public class MineNumberLabel extends JLabel implements Observer {
 	public void update(Observable o, Object arg) {
 		// TODO Auto-generated method stub
 		UpdateMessage updateMessage = (UpdateMessage) arg;
+		System.out.println("edu.nju.view.MineNumberLabel -- "+updateMessage.getKey()+"\n");
 		if(updateMessage.getKey().equals("mineNum")){
 			
 			int remainMines = (Integer) updateMessage.getValue();

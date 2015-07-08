@@ -21,7 +21,6 @@ public class HostThread extends Thread {
 		System.out.println("Host Waiting for Client!!!");
 		client = server.accept();
 		reader = new ObjectInputStream(new BufferedInputStream(client.getInputStream()));
-		
 		out = new ObjectOutputStream(client.getOutputStream());
 	}
 	
@@ -51,7 +50,7 @@ public class HostThread extends Thread {
 			}
 			
 			try {
-				Thread.sleep(50);
+				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

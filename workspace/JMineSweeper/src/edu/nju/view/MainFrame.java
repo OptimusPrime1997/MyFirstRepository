@@ -5,6 +5,7 @@
  */
 package edu.nju.view;
 
+import java.awt.Dialog;
 import java.awt.Font;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -33,18 +34,25 @@ import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.plaf.basic.BasicBorders.MarginBorder;
 
+import sun.net.www.content.text.plain;
+
 import com.sun.org.apache.xml.internal.resolver.helpers.PublicId;
 import com.sun.xml.internal.bind.v2.schemagen.xmlschema.List;
 
 import edu.nju.controller.impl.MenuControllerImpl;
 import edu.nju.controller.service.MenuControllerService;
+import edu.nju.main.JMineSweeper;
+import edu.nju.model.impl.BaseModel;
 import edu.nju.model.impl.ChessBoardModelImpl;
+import edu.nju.model.impl.GameModelImpl;
 import edu.nju.model.impl.UpdateMessage;
 import edu.nju.model.po.BlockPO;
 import edu.nju.model.state.GameResultState;
 import edu.nju.model.state.GameState;
 import edu.nju.model.vo.BlockVO;
 import edu.nju.model.vo.GameVO;
+import edu.nju.network.Player;
+import edu.nju.network.modelProxy.GameModelProxy;
 import edu.nju.view.listener.CoreListener;
 import edu.nju.view.listener.MenuListener;
 
@@ -78,7 +86,7 @@ public class MainFrame extends JFrame implements Observer {
 	private JMenuItem client;
 	private MineNumberLabel mineNumberLabel;
 	private JButton startButton;
-	private JLabel time;
+	private JLabel timeLabel;
 	private MineBoardPanel body;
 	private final int buttonSize = 16;
 	private final int bodyMarginNorth = 20;
@@ -89,11 +97,12 @@ public class MainFrame extends JFrame implements Observer {
 	private MenuListener menuListener;
 
 	private MineBoardPanel mineBoardPanel;
+	
+	private static int sTime;
+	
+	private Dialog uiDialog;
+	
 
-	public static Thread thread;
-	public static boolean isFirstClick=true;
-	public static boolean isBlocked=false;
-	public static  int count;
 	// End of variables declaration
 
 	public MainFrame() {
@@ -107,9 +116,6 @@ public class MainFrame extends JFrame implements Observer {
 		componentsInstantiation();
 		initComponents();
 		mainFrame.setVisible(true);
-		Timer timer=new Timer();
-		thread=new Thread(timer);
-		timer.clearCount();
 //		thread.start();
 	}
 
@@ -119,7 +125,7 @@ public class MainFrame extends JFrame implements Observer {
 		head = new JPanel();
 		mineNumberLabel = new MineNumberLabel();
 		startButton = new JButton();
-		time = new JLabel();
+		timeLabel = new JLabel();
 
 		aJMenuBar = new JMenuBar();
 		game = new JMenu();
@@ -145,6 +151,7 @@ public class MainFrame extends JFrame implements Observer {
 		menuListener = new MenuListener(this);
 
 		mineBoardPanel = new MineBoardPanel();
+		uiDialog=new Dialog(this);
 	}
 
 	/**
@@ -232,17 +239,17 @@ public class MainFrame extends JFrame implements Observer {
 		startButton.addActionListener(coreListener);
 		Font font = new Font("Serif", Font.BOLD, 12);
 		mineNumberLabel.setFont(font);
-		time.setFont(font);
+		timeLabel.setFont(font);
 
 		mineNumberLabel.setHorizontalAlignment(JLabel.CENTER);
-		time.setHorizontalAlignment(JLabel.CENTER);
+		timeLabel.setHorizontalAlignment(JLabel.CENTER);
 
 		mineNumberLabel.setText("剩余雷数");
-		time.setText("000");
+		timeLabel.setText("000");
 
 		head.add(mineNumberLabel);
 		head.add(startButton);
-		head.add(time);
+		head.add(timeLabel);
 		mainFrame.getContentPane().add(head);
 		// build head panel end
 
@@ -261,7 +268,7 @@ public class MainFrame extends JFrame implements Observer {
 		startButton.setBounds((head.getWidth() - 50) / 2,
 				(head.getHeight() - 50) / 2, 50, 50);
 		mineNumberLabel.setBounds(0, 0, head.getHeight(), head.getHeight());
-		time.setBounds(head.getWidth() - head.getHeight(), 0, head.getHeight(),
+		timeLabel.setBounds(head.getWidth() - head.getHeight(), 0, head.getHeight(),
 				head.getHeight());
 
 		body.setBounds(2, head.getHeight(), body.getColumns() * buttonSize + 2
@@ -331,14 +338,30 @@ public class MainFrame extends JFrame implements Observer {
 			restart(gameHeight, gameWidth, level);
 			startButton.setIcon(Images.START_RUN);
 		} else if (notifingObject.getKey().equals("end")) {
-			thread.stop();
+			Player uiPlayer=notifingObject.getPlayer();
+			GameModelImpl.getThread().suspend();
+			BaseModel.isBlocked = true;
 			GameVO newGame2 = (GameVO) notifingObject.getValue();
-			if(newGame2.getGameResultState()==GameResultState.FAIL){
-				startButton.setIcon(Images.START_END);
-			}else if(newGame2.getGameResultState()==GameResultState.SUCCESS){
+			if(newGame2.getGameResultState()==GameResultState.SUCCESS){
 				startButton.setIcon(Images.START_BEGIN);
+				if(uiPlayer==Player.HOST){
+					JOptionPane.showMessageDialog(this, "HOST WIN :)\nCLINET LOSE :(");
+				}else{
+					JOptionPane.showMessageDialog(this, "CLIENT WIN :)\nHOST LOSE :(");
+				}
+			}else{
+				startButton.setIcon(Images.START_END);
+				if(uiPlayer==Player.HOST){
+					JOptionPane.showMessageDialog(this, "CLIENT WIN :)\nHOST LOSE :(");
+				}else{
+					JOptionPane.showMessageDialog(this, "HOST WIN :)\nCLINET LOSE :(");
+				}
 			}
-			}
+			System.out.println("更换图像！");
+		}else if(notifingObject.getKey().equals("time")){
+			timeLabel.setText(""+(String)notifingObject.getValue());
+			System.out.println("更新时间！！！");
+		}
 	}
 
 	private void restart(int mineBoardHeight, int mineBoardWidth, String type) {
@@ -350,7 +373,7 @@ public class MainFrame extends JFrame implements Observer {
 		startButton.setBounds((head.getWidth() - 50) / 2,
 				(head.getHeight() - 50) / 2, 50, 50);
 		mineNumberLabel.setBounds(0, 0, head.getHeight(), head.getHeight());
-		time.setBounds(head.getWidth() - head.getHeight(), 0, head.getHeight(),
+		timeLabel.setBounds(head.getWidth() - head.getHeight(), 0, head.getHeight(),
 				head.getHeight());
 
 		body.setBounds(2, head.getHeight(), mineBoardWidth * buttonSize + 2
@@ -361,10 +384,9 @@ public class MainFrame extends JFrame implements Observer {
 				javax.swing.border.TitledBorder.CENTER,
 				javax.swing.border.TitledBorder.DEFAULT_POSITION));
 		mainFrame.getContentPane().add(body);
-		mainFrame.setSize(body.getWidth() + 10,
-				body.getHeight() + head.getHeight() + 60);
-		time.setText("000");
-		isFirstClick=true;
+		mainFrame.setSize(body.getWidth() + 10,body.getHeight() + head.getHeight() + 60);
+		timeLabel.setText("000");
+		BaseModel.isFirstClick=true;
 
 		if (type == "自定义") {
 			custom.setSelected(true);
@@ -380,38 +402,11 @@ public class MainFrame extends JFrame implements Observer {
 		mainFrame.validate();
 		mainFrame.repaint();
 	}
-	public JLabel getTimer(){
-		return time;
+	public JLabel getTimeLabel(){
+		return this.timeLabel;
 	}
-
-	class Timer implements Runnable{
-		
-		public void run() {
-			// TODO Auto-generated method stub
-			while (true) {
-				int seconds;
-				String msg = "";
-				seconds = (int) (count);
-				if(seconds<100&&seconds>=10){
-					msg += "0" + seconds;
-				}else if (seconds < 10) {
-					msg += "00" + seconds;
-				} else {
-					msg += seconds;
-				}
-				time.setText(msg);
-				count++;
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+	public void saveTime(int currentTime){
+		sTime=currentTime;
+	}
 	
-			}
-		}
-		private void clearCount(){
-			count=0;
-		}
-		
-	}
 }

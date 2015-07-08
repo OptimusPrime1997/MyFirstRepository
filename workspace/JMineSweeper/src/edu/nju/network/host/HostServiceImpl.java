@@ -3,6 +3,7 @@ package edu.nju.network.host;
 import java.util.Observable;
 
 import edu.nju.model.impl.UpdateMessage;
+import edu.nju.network.Player;
 import edu.nju.network.TransformObject;
 
 public class HostServiceImpl extends HostService {

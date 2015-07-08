@@ -16,7 +16,7 @@ public class RightClickOperation extends MineOperation{
 		public void execute() {
 			// TODO Auto-generated method stub
 			ChessBoardModelService chess = OperationQueue.getChessBoardModel();
-			chess.mark(x, y);
+			chess.mark(x, y, super.player);
 		}
 
 	}

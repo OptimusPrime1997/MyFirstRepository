@@ -5,6 +5,7 @@ import java.util.Observer;
 
 import edu.nju.model.impl.BaseModel;
 import edu.nju.model.impl.UpdateMessage;
+import edu.nju.network.Player;
 import edu.nju.network.TransformObject;
 import edu.nju.network.client.ClientService;
 
@@ -21,17 +22,18 @@ public class ModelProxy extends BaseModel implements Observer{
 		TransformObject obj = (TransformObject) arg;
 		String trigger_class = obj.getSource();
 		UpdateMessage msg = obj.getMsg();
+	
 		System.out.println("GameModelProxy get the UpdateMessage! -- " + msg.getKey()+"++++"+"Triiget class is " + trigger_class);
 		System.out.println();
 		Class<?> super_class = this.getClass().getInterfaces()[0];
 		System.out.println("super class is : " + super_class.getName());
 		try {
-			if(super_class.isAssignableFrom(Class.forName(trigger_class))){
+//			if(super_class.isAssignableFrom(Class.forName(trigger_class))){
 				System.out.println(this.getClass().getName()+" get the UpdateMessage!");
 				this.updateChange(msg);
 				System.out.println("UpdateMessage send!!!");
-			}
-		} catch (ClassNotFoundException e) {
+//			}
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

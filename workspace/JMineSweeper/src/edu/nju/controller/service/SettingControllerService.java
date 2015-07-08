@@ -23,5 +23,6 @@ public interface SettingControllerService {
 	 * @param nums   自定义的地雷数
 	 * @return
 	 */
-	public boolean setCustomizedGameLevel(int height,int width , int nums);
+	
+	boolean setCustomizedGameLevel(int width, int heigth, int mineNum);
 }

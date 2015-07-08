@@ -31,7 +31,6 @@ public class ClientThread extends Thread {
 			//read from socket;
 			try {
 				Object obj = reader.readObject();
-				
 				ClientAdapter.readData(obj);
 				System.out.println("CLIENT read object!");
 				
@@ -48,7 +47,7 @@ public class ClientThread extends Thread {
 			}
 			
 			try {
-				Thread.sleep(10);
+				Thread.sleep(1);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -58,6 +58,8 @@ public class Images {
 	public static final ImageIcon MARKED = createImageIcon("images/MARKED.gif");
 
 	public static final ImageIcon MARKED_MINE = createImageIcon("images/MARKED_MINE.gif");
+	
+	public static final ImageIcon MARKED_MINEC=createImageIcon("images/MARKED_MINEC.gif");
 
 	public static ImageIcon getImageIconByState(DisplayBlockState state){
 		switch (state) {
@@ -82,7 +84,11 @@ public class Images {
 		case EIGHT:
 			return number[7];
 		case FLAG:
+			System.out.println("红色旗！");
 			return MARKED_MINE;
+		case FLAGC:
+			System.out.println("绿色旗！");
+			return MARKED_MINEC;
 		case MINE:
 			return MINE;
 		case Bomb:

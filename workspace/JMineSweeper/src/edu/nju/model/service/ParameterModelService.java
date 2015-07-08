@@ -25,5 +25,7 @@ public interface ParameterModelService {
 	 * @return
 	 */
 	public boolean addMineNum();
+
+	public boolean isOKMinus();
 	
 }

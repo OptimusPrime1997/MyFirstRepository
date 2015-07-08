@@ -33,12 +33,12 @@ public class BlockPO {
 
 		if(state == BlockState.CLICK&&(!isMine)){
 			dbs = DisplayBlockState.getClickState(mineNum);
-		}
-		else if(state == BlockState.UNCLICK){
+		}else if(state == BlockState.UNCLICK){
 			dbs = DisplayBlockState.UNCLICK;
-		}
-		else if(state == BlockState.FLAG){
-			dbs = DisplayBlockState.FLAG;
+		}else if(state == BlockState.FLAGC){
+			dbs = DisplayBlockState.FLAGC;
+		}else if(state ==BlockState.FLAG){
+			dbs=DisplayBlockState.FLAG;
 		}
 		
 		if(gameState == GameState.OVER){//当游戏为结束状态时

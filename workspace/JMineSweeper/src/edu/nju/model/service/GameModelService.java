@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.nju.model.impl.GameLevel;
 import edu.nju.model.state.GameResultState;
+import edu.nju.network.Player;
 
 /**
  * 游戏model，负责控制整个游戏状态
@@ -42,13 +43,15 @@ public interface GameModelService {
 	 * @param time 游戏时间
 	 * @return
 	 */
-	public boolean gameOver(GameResultState result);
+	public boolean gameOver(GameResultState result, Player player);
 
 	/**
 	 * 获得游戏等级列表
 	 * @return
 	 */
 	public List<GameLevel> getGameLevel();
+
+	
 
 }
 

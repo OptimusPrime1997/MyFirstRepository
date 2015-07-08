@@ -18,6 +18,7 @@ import javax.swing.JTextField;
 
 import edu.nju.controller.impl.MenuControllerImpl;
 import edu.nju.controller.service.MenuControllerService;
+import edu.nju.main.JMineSweeper;
 import edu.nju.model.impl.GameModelImpl;
 import edu.nju.view.listener.MenuListener;
 
@@ -103,11 +104,7 @@ public class CustomDialog {
 				widHeiNum[0]=width;
 				widHeiNum[1]=height;
 				widHeiNum[2]=mineNumber;
-				System.out.println("++"+widHeiNum[0]+"+"+widHeiNum[1]+"+"+widHeiNum[2]+"+"+edu.nju.view.listener.MenuListener.message);
-				edu.nju.view.listener.MenuListener.message="custom";
-				System.out.println("++"+widHeiNum[0]+"+"+widHeiNum[1]+"+"+widHeiNum[2]+"+"+edu.nju.view.listener.MenuListener.message);
-				 MenuControllerService menuController1=new MenuControllerImpl();
-				 menuController1.startGame();
+				JMineSweeper.getSettingGameModelImpl().setCustomizedGameLevel(width,height,mineNumber);
 			}
 
 		});
@@ -180,9 +177,7 @@ public class CustomDialog {
 				widHeiNum[0]=width;
 				widHeiNum[1]=height;
 				widHeiNum[2]=mineNumber;
-				System.out.println("++"+widHeiNum[0]+"+"+widHeiNum[1]+"+"+widHeiNum[2]+"+"+edu.nju.view.listener.MenuListener.message);
-				edu.nju.view.listener.MenuListener.message="custom";
-				System.out.println("++"+widHeiNum[0]+"+"+widHeiNum[1]+"+"+widHeiNum[2]+"+"+edu.nju.view.listener.MenuListener.message);
+				
 				 MenuControllerService menuController1=new MenuControllerImpl();
 				 menuController1.startGame();
 			}
